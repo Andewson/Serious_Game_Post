@@ -75,7 +75,7 @@ function Home(root) {
   import('./ui/map-view.js').then(({ renderMap }) => renderMap(document.getElementById('heroMap'), { teamIdx: 0, elements: [], zezState: 'announced' }));
   // Offene Spiele zum Weiterspielen
   const localOpen = (() => { try { return JSON.parse(localStorage.getItem('lm-local-games') || '[]').filter((g) => g.status === 'running'); } catch { return []; } })();
-  const box = h('div', { class: 'card' }, h('h4', {}, 'Weiterspielen / Continue'));
+  const box = h('div', { class: 'card' }, h('h4', {}, t('resumeTitle')));
   let any = false;
   for (const g of localOpen.slice(0, 3)) {
     any = true;
@@ -85,7 +85,7 @@ function Home(root) {
   OnlineBackend.myOpenGames().then((games) => {
     for (const g of games.slice(0, 3)) {
       if (!any) { resume.append(box); any = true; }
-      box.append(h('div', { class: 'row' }, h('span', {}, `${t('online')} · ${g.code} · ${g.status}`), h('span', { class: 'spacer' }), h('button', { class: 'btn small', onclick: () => nav(g.status === 'lobby' ? 'lobby' : 'game', { mode: 'online', id: g.id }) }, t('open'))));
+      box.append(h('div', { class: 'row' }, h('span', {}, `${t('online')} · ${g.code} · ${g.status === 'lobby' ? t('stLobby') : t('stRunning')}`), h('span', { class: 'spacer' }), h('button', { class: 'btn small', onclick: () => nav(g.status === 'lobby' ? 'lobby' : 'game', { mode: 'online', id: g.id }) }, t('open'))));
     }
   }).catch(() => {});
 }
@@ -143,11 +143,16 @@ function Lobby(root, params) {
   root.append(page);
   let stop = null;
   let poll = null;
+  let sig = '';
   const draw = async () => {
     let data;
     try { data = await OnlineBackend.loadGame(params.id); } catch (e) { clear(page).append(errorBox(onlineError(e))); return; }
     const { game, teams } = data;
     if (game.status !== 'lobby') { nav('game', params); return; }
+    // Nur neu zeichnen, wenn sich etwas geändert hat (sonst gehen Klicks verloren)
+    const nextSig = `${getLang()}|${teams.map((x) => x.slot + x.name).join(',')}`;
+    if (nextSig === sig) return;
+    sig = nextSig;
     const isHost = game.created_by === currentUserId();
     clear(page).append(h('div', { class: 'card stack', style: { maxWidth: '640px' } },
       h('h2', {}, t('lobbyTitle')), h('p', {}, t('lobbyShare')), h('div', { class: 'bigcode' }, game.code),
@@ -214,6 +219,8 @@ async function OnlineGame(root, params) {
   const me = currentUserId();
   let lastResolved = -1;
   let screen = null;
+  let sig = '';
+  const signature = (d) => `${d.game.status}|${d.game.current_round}|${d.teams.length}|${d.submissions.map((x) => `${x.round}:${x.slot}`).sort().join(',')}`;
   const controller = {
     meta: { mode: 'online', id: params.id, code: data.game.code },
     mySlots: [],
@@ -247,6 +254,9 @@ async function OnlineGame(root, params) {
   async function refresh() {
     let d;
     try { d = await OnlineBackend.loadGame(params.id); } catch { return; }
+    const nextSig = signature(d);
+    if (screen && nextSig === sig) return; // nichts Neues: Eingaben und Scrollposition bleiben unberührt
+    sig = nextSig;
     const before = lastResolved;
     if (!apply(d)) return;
     const resolved = controller.state.finished ? controller.state.rounds : controller.state.round - 1;
@@ -265,6 +275,7 @@ async function OnlineGame(root, params) {
   }
 
   if (!apply(data)) return;
+  sig = signature(data);
   lastResolved = controller.state.finished ? controller.state.rounds : controller.state.round - 1;
   clear(root);
   screen = GameScreen(root, controller, nav);
@@ -272,7 +283,8 @@ async function OnlineGame(root, params) {
   let stop = null;
   try { stop = OnlineBackend.subscribe(params.id, () => refresh()); } catch { /* Polling reicht */ }
   const poll = setInterval(refresh, 8000);
-  const tick = setInterval(() => { if (controller.canSkip() && screen) screen.render(); }, 30000);
+  let skipShown = false; // «Fehlende überspringen» erst nach Ablauf der Zeit einblenden, und nur einmal neu zeichnen
+  const tick = setInterval(() => { const can = !!controller.canSkip(); if (can !== skipShown && screen) { skipShown = can; screen.render(); } }, 30000);
   cleanup = () => { if (stop) stop(); clearInterval(poll); clearInterval(tick); };
 }
 
