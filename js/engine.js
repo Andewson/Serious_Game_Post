@@ -314,6 +314,7 @@ function simulateTeam(state, team, r, fx) {
   const zoneAcc = () => ({ parcels: 0, onTime: 0, failed: 0, emergency: 0, postLate: 0, fixed: 0, variable: 0, co2: 0, cost: 0 });
   const zones = { stadt: zoneAcc(), agglo: zoneAcc(), land: zoneAcc() };
   const breakdown = { personnel: 0, leasing: 0, energy: 0, resupply: 0, secondAttempts: 0, emergency: 0, post: 0, crowd: 0, co2tax: 0 };
+  const co2BySource = { vanDiesel: 0, vanE: 0, hub: 0, box: 0, post: 0, crowd: 0, emergency: 0 };
   let zezBlocked = false;
 
   // Aktive Zusteller
@@ -366,7 +367,7 @@ function simulateTeam(state, team, r, fx) {
     const D = demandOf(f);
     let R = D;
     z.parcels += D;
-    const rec = { demand: D, by: [] };
+    const rec = { demand: D, by: [], onTime: 0, failed: 0, late: 0, co2: 0, cost: 0 };
     perField[f.id] = rec;
     const book = (src, n) => { rec.by.push({ src, n }); };
     // a) Box
@@ -379,6 +380,7 @@ function simulateTeam(state, team, r, fx) {
       z.variable += energy + res + fails * E.box.varCost;
       breakdown.energy += energy; breakdown.resupply += res; breakdown.secondAttempts += fails * E.box.varCost;
       z.co2 += n * E.box.resupplyCo2;
+      rec.onTime += n - fails; rec.failed += fails; rec.cost += energy + res + fails * E.box.varCost; rec.co2 += n * E.box.resupplyCo2; co2BySource.box += n * E.box.resupplyCo2;
       book('box', n);
     }
     // b) Eigene Fahrzeuge
@@ -402,6 +404,7 @@ function simulateTeam(state, team, r, fx) {
       breakdown.energy += energy; breakdown.resupply += res; breakdown.secondAttempts += second;
       const co2 = (n + fails) * v.p.co2 * dist + (v.kind === 'hub' ? n * v.p.resupplyCo2 : 0);
       z.co2 += co2;
+      rec.onTime += n - fails; rec.failed += fails; rec.cost += energy + res + second; rec.co2 += co2; co2BySource[v.kind] += co2;
       book(v.el.id, n);
     }
     // c) Post (nur Restmenge)
@@ -414,6 +417,7 @@ function simulateTeam(state, team, r, fx) {
         const c = n * E.post.varCost;
         z.variable += c; breakdown.post += c;
         z.co2 += n * E.post.co2;
+        rec.onTime += n * E.post.onTimeRate; rec.failed += fails; rec.late += n * (1 - E.post.onTimeRate); rec.cost += c; rec.co2 += n * E.post.co2; co2BySource.post += n * E.post.co2;
         book('post', n);
       }
     }
@@ -430,6 +434,7 @@ function simulateTeam(state, team, r, fx) {
       const cost = (n + fails) * E.crowd.varCost;
       z.variable += cost; breakdown.crowd += cost;
       z.co2 += (n + fails) * E.crowd.co2 * dist;
+      rec.onTime += n - fails; rec.failed += fails; rec.cost += cost; rec.co2 += (n + fails) * E.crowd.co2 * dist; co2BySource.crowd += (n + fails) * E.crowd.co2 * dist;
       book('crowd', n);
     }
     // e) Notfall-Subunternehmer
@@ -440,6 +445,7 @@ function simulateTeam(state, team, r, fx) {
       const cost = n * (E.emergency.varCost + (fx.fuel ? cfg.events.fuel.emergencyExtra : 0));
       z.variable += cost; breakdown.emergency += cost;
       z.co2 += n * E.emergency.co2 * dist;
+      rec.failed += fails; rec.late += n; rec.cost += cost; rec.co2 += n * E.emergency.co2 * dist; co2BySource.emergency += n * E.emergency.co2 * dist;
       book('emergency', n);
     }
   }
@@ -453,10 +459,26 @@ function simulateTeam(state, team, r, fx) {
     if (el.kind === 'box') { leasing = E.box.leasing; }
     zones[zone].fixed += personnel + leasing;
     breakdown.personnel += personnel; breakdown.leasing += leasing;
+    allocate(el.kind === 'box' ? null : el.id, el.field, personnel + leasing);
   }
   if (postActive) {
     const fee = E.post.feePerRegion * REGION_IDS.length;
     zones.land.fixed += fee; breakdown.post += fee;
+    const landFields = map.active.filter((f) => f.zone === 'land');
+    const postN = landFields.reduce((a, f) => a + perField[f.id].by.filter((b) => b.src === 'post').reduce((x, b) => x + b.n, 0), 0);
+    for (const f of landFields) {
+      const n = perField[f.id].by.filter((b) => b.src === 'post').reduce((x, b) => x + b.n, 0);
+      perField[f.id].cost += postN > 1e-9 ? fee * (n / postN) : fee / landFields.length;
+    }
+  }
+  // Fixkosten eines Elements auf die Felder verteilen, die es beliefert (sonst auf seinen Standort)
+  function allocate(srcId, field, amount) {
+    if (srcId) {
+      const parts = Object.values(perField).map((rec) => [rec, rec.by.filter((b) => b.src === srcId).reduce((x, b) => x + b.n, 0)]).filter(([, n]) => n > 1e-9);
+      const tot = parts.reduce((a, [, n]) => a + n, 0);
+      if (tot > 1e-9) { for (const [rec, n] of parts) rec.cost += amount * (n / tot); return; }
+    }
+    perField[field].cost += amount;
   }
   // CO2-Abgabe
   if (fx.co2tax) {
@@ -464,6 +486,7 @@ function simulateTeam(state, team, r, fx) {
       const tax = (zones[zk].co2 / 1000) * cfg.events.co2tax.chfPerKg;
       zones[zk].variable += tax; breakdown.co2tax += tax;
     }
+    for (const rec of Object.values(perField)) rec.cost += (rec.co2 / 1000) * cfg.events.co2tax.chfPerKg;
   }
   for (const zk of ZONES) zones[zk].cost = zones[zk].fixed + zones[zk].variable;
 
@@ -473,7 +496,7 @@ function simulateTeam(state, team, r, fx) {
     ...crowds.map((c) => ({ id: `crowd-${c.field}`, kind: 'crowd', field: c.field, used: c.used, capacity: c.cap }))
   ];
   const report = {
-    round: r, zones, totals, breakdown, utilization, perField,
+    round: r, zones, totals, breakdown, co2BySource, utilization, perField,
     service: { ...team.service }, effects: fx, zezBlocked,
     drivers: teamDrivers(state, team, r), wage: state.wage
   };

@@ -1,5 +1,5 @@
 {
-  "version": "2.2.0",
+  "version": "2.3.0",
   "rounds": 4,
   "actionsPerRound": 2,
   "maxTeams": 5,
@@ -178,5 +178,54 @@
     },
     "shocksPerGame": 2,
     "extraAnnouncements": 1
+  },
+  "ratings": {
+    "_note": "Bewertung 1–5: Schwellen für 5, 4, 3, 2 Symbole. 3 = Mindeststandard knapp erfüllt (Kosten und Pünktlichkeit).",
+    "kpi": {
+      "costPerParcel": [
+        4.9,
+        5.3,
+        5.6,
+        6.2
+      ],
+      "onTime": [
+        0.96,
+        0.93,
+        0.9,
+        0.85
+      ],
+      "co2PerParcel": [
+        150,
+        220,
+        280,
+        340
+      ],
+      "failRate": [
+        0.04,
+        0.055,
+        0.07,
+        0.085
+      ]
+    },
+    "option": {
+      "cost": [
+        2.5,
+        3.5,
+        4.5,
+        6.0
+      ],
+      "co2": [
+        50,
+        120,
+        200,
+        300
+      ],
+      "reliability": [
+        0.99,
+        0.95,
+        0.9,
+        0.85
+      ]
+    }
   }
 }

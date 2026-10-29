@@ -137,3 +137,46 @@ export function checkAction(state, teamIdx, action, plan) {
 }
 
 export { ZONES };
+
+// ---------- Bewertungen 1–5 ----------
+const HIGHER_BETTER = { onTime: true, reliability: true };
+function scale(thr, v, higher) {
+  for (let i = 0; i < thr.length; i++) if (higher ? v >= thr[i] - 1e-9 : v <= thr[i] + 1e-9) return 5 - i;
+  return 1;
+}
+// KPI eines Teams oder eines Felds (costPerParcel, onTime, co2PerParcel, failRate)
+export function rateKpi(cfg, k, v) { return scale(cfg.ratings.kpi[k], v, !!HIGHER_BETTER[k]); }
+// Eigenschaften einer Option (cost = CHF pro Paket voll ausgelastet, co2 = g pro Paket, reliability = Anteil pünktlich)
+export function rateOption(cfg, k, v) { return scale(cfg.ratings.option[k], v, !!HIGHER_BETTER[k]); }
+
+// Typischer Einsatzort einer Option für die feste Bewertung
+const RATING_ZONE = { vanDiesel: 'stadt', vanE: 'stadt', hub: 'stadt', box: 'stadt', post: 'land', crowd: 'stadt', emergency: 'stadt' };
+export function optionRatings(state, kind) {
+  const z = RATING_ZONE[kind];
+  const sp = optionSpecs({ ...state, events: { ...state.events, shocks: [] } }, kind, z);
+  return {
+    zone: z, specs: sp,
+    cost: rateOption(state.config, 'cost', sp.fullCost),
+    co2: rateOption(state.config, 'co2', sp.co2),
+    reliability: rateOption(state.config, 'reliability', sp.onTime)
+  };
+}
+
+// Kennzahl pro Feld aus einem Bericht
+export function fieldValue(rec, k) {
+  const d = rec.demand || 1;
+  if (k === 'onTime') return rec.onTime / d;
+  if (k === 'costPerParcel') return rec.cost / d;
+  if (k === 'co2PerParcel') return rec.co2 / d;
+  if (k === 'failRate') return rec.failed / d;
+  return null;
+}
+
+// Warum kommen Pakete zu spät? (Anzahl Pakete)
+export function lateReasons(report) {
+  const t = report.totals;
+  const em = t.emergency;
+  const post = t.postLate;
+  const failed = Math.max(0, t.parcels - t.onTime - em - post);
+  return { failed, emergency: em, post, total: t.parcels - t.onTime, parcels: t.parcels };
+}

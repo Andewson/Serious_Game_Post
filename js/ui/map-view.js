@@ -6,7 +6,7 @@ import { t } from '../i18n.js';
 const SIZE = 30;
 const SQ3 = Math.sqrt(3);
 const ZONE_FILL = { stadt: '#ddd6c8', agglo: '#e2ecd3', land: '#bcd9a4', see: '#b9d7ec', berg: '#d3ccc1' };
-const HUE = '#1d5fbf';
+const HUE = '#0f5e63';
 const INK = '#141414';
 const NEG = '#c4242a';
 
@@ -47,7 +47,8 @@ function defs() {
 
 // opts: { teamIdx, elements, crowd(this round), post, zezState: 'none'|'announced'|'active',
 //   selectable: fieldId => bool, selectedField, rangePreview: {range, zones}|null, onSelect,
-//   emergency: {fieldId: Anteil Notfall-Pakete} (Prognose), onInspect: fieldId => void, inspected }
+//   emergency: {fieldId: Anteil Notfall-Pakete} (Prognose), onInspect: fieldId => void, inspected,
+//   metric: { fill: {fieldId: Farbe}, text: {fieldId: kurzer Wert}, tip: {fieldId: Text} } – Kennzahl-Ansicht }
 export function renderMap(container, opts) {
   clear(container);
   const map = buildMap();
@@ -91,7 +92,8 @@ export function renderMap(container, opts) {
     if (opts.selectable && !selectable && isActive) cls.push('dim');
     if (opts.selectedField === f.id || opts.inspected === f.id) cls.push('sel');
     else if (selectable && restricted) cls.push('pick');
-    let fill = ZONE_FILL[f.zone];
+    const metric = opts.metric && isActive ? opts.metric : null;
+    let fill = metric ? metric.fill[f.id] : ZONE_FILL[f.zone];
     const poly = s('polygon', {
       points: corners(c), fill, class: cls.join(' '),
       onclick: selectable ? () => opts.onSelect && opts.onSelect(f.id) : (isActive && !opts.selectable && opts.onInspect ? () => opts.onInspect(f.id) : null),
@@ -99,7 +101,7 @@ export function renderMap(container, opts) {
         if (opts.rangePreview && (selectable || !opts.selectable)) drawRange(f.id);
         if (!isActive) return;
         tooltip.style.display = 'block';
-        tooltip.textContent = `${f.id} · ${t('zone_' + f.zone)}${f.region ? ' · ' + t('region_' + f.region) : ''}`;
+        tooltip.textContent = `${f.id} · ${t('zone_' + f.zone)}${f.region ? ' · ' + t('region_' + f.region) : ''}${metric && metric.tip[f.id] ? ' · ' + metric.tip[f.id] : ''}`;
         moveTip(ev);
       },
       onmousemove: (ev) => moveTip(ev),
@@ -109,7 +111,8 @@ export function renderMap(container, opts) {
     if (f.zone === 'berg') gHex.append(s('path', { d: `M${c.x - 12} ${c.y + 8} L${c.x - 3} ${c.y - 8} L${c.x + 2} ${c.y} L${c.x + 6} ${c.y - 5} L${c.x + 13} ${c.y + 8} Z`, fill: '#b3aa9d', class: 'icon' }));
     if (f.zone === 'see') gHex.append(s('path', { d: `M${c.x - 12} ${c.y} q6 -5 12 0 t12 0`, stroke: '#7fb3d9', 'stroke-width': 2, fill: 'none', class: 'icon' }));
     if (isActive) gHex.append(s('text', { x: c.x, y: c.y - SIZE * 0.55, 'text-anchor': 'middle', class: 'flabel' }, f.id));
-    if (opts.emergency && opts.emergency[f.id] > 0.05) {
+    if (metric) gHex.append(s('text', { x: c.x, y: c.y + 4, 'text-anchor': 'middle', class: 'mval' }, metric.text[f.id]));
+    if (!opts.metric && opts.emergency && opts.emergency[f.id] > 0.05) {
       const share = opts.emergency[f.id];
       gHex.append(s('polygon', { points: corners(c, SIZE - 4), fill: NEG, 'fill-opacity': Math.min(0.35, 0.1 + share * 0.3), stroke: NEG, 'stroke-width': share > 0.5 ? 3 : 2, class: 'icon' }));
     }
@@ -125,7 +128,7 @@ export function renderMap(container, opts) {
     else add(el.field, el.kind + (el.pending ? 'Pending' : ''));
   }
   for (const c of opts.crowd || []) add(c.field, 'crowd');
-  for (const [fieldId, items] of Object.entries(perField)) {
+  for (const [fieldId, items] of Object.entries(opts.metric ? {} : perField)) {
     const c = center(map.byId[fieldId]);
     const list = Object.entries(items);
     let x = c.x - (list.length * 15) / 2 + 1;
@@ -137,7 +140,7 @@ export function renderMap(container, opts) {
       x += 15;
     }
   }
-  if (opts.post) {
+  if (opts.post && !opts.metric) {
     for (const reg of ['nord', 'ost', 'west']) {
       const f = map.active.find((x) => x.region === reg && x.id.endsWith('1'));
       const c = center(f);

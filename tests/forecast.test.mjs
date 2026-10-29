@@ -83,3 +83,18 @@ test('Ausblick verrät keine Überraschung der nächsten Runde', async () => {
     }
   }
 });
+
+test('Kennzahlen pro Feld summieren sich zu den Totalen (Kosten, pünktlich, Fehlzustellungen, CO₂)', () => {
+  for (let seed = 1; seed <= 40; seed++) {
+    let s = createGame({ config: cfg, seed, teamNames: ['A'] });
+    for (let r = 1; r <= s.rounds; r++) {
+      s = resolveRound(s, [plans[(seed + r) % plans.length]]);
+      const rep = s.teams[0].reports[r - 1];
+      const sum = { cost: 0, onTime: 0, failed: 0, co2: 0 };
+      for (const rec of Object.values(rep.perField)) for (const k of Object.keys(sum)) sum[k] += rec[k];
+      for (const k of Object.keys(sum)) assert.ok(Math.abs(sum[k] - rep.totals[k]) < 1e-6 * Math.max(1, rep.totals[k]), `Seed ${seed} R${r} ${k}: ${sum[k]} vs ${rep.totals[k]}`);
+      const co2 = Object.values(rep.co2BySource).reduce((a, b) => a + b, 0);
+      assert.ok(Math.abs(co2 - rep.totals.co2) < 1e-6 * rep.totals.co2);
+    }
+  }
+});
