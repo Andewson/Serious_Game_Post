@@ -19,12 +19,12 @@ async function loadConfig() {
 
 function topbar() {
   return h('div', { class: 'topbar' },
-    h('div', { class: 'brand', onclick: () => nav('home') },
-      h('span', { class: 'logo', html: '<svg viewBox="0 0 32 32" width="26" height="26"><polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="#0e6b6b"/><path d="M8 19V12h10v7M18 14h4l3 3v2" stroke="#fff" stroke-width="2" fill="none" stroke-linejoin="round"/><circle cx="12" cy="21" r="2" fill="#fff"/><circle cx="22" cy="21" r="2" fill="#fff"/></svg>' }),
+    h('button', { class: 'brand', onclick: () => nav('home'), 'aria-label': t('home') },
+      h('span', { class: 'logo', html: '<svg viewBox="0 0 32 32" width="24" height="24"><polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="#141414"/><path d="M8 19V12h10v7M18 14h4l3 3v2" stroke="#fff" stroke-width="2" fill="none" stroke-linejoin="round"/><circle cx="12" cy="21" r="2" fill="#fff"/><circle cx="22" cy="21" r="2" fill="#fff"/></svg>' }),
       t('appTitle')),
     h('span', { class: 'spacer' }),
     h('button', { class: 'btn small ghost', onclick: () => nav('rules') }, t('rules')),
-    h('button', { class: 'btn small', onclick: () => { setLang(getLang() === 'de' ? 'en' : 'de'); current && current.rerender ? current.rerender() : nav(currentRoute.name, currentRoute.params); } }, t('lang')));
+    h('button', { class: 'btn small', 'aria-label': getLang() === 'de' ? 'English' : 'Deutsch', onclick: () => { setLang(getLang() === 'de' ? 'en' : 'de'); current && current.rerender ? current.rerender() : nav(currentRoute.name, currentRoute.params); } }, t('lang')));
 }
 
 let current = null;
@@ -55,37 +55,37 @@ function onlineError(e) {
 // ---------- Startseite ----------
 function Home(root) {
   const page = h('div', { class: 'page' });
-  page.append(h('div', { class: 'hero' },
+  page.append(h('div', { class: 'home' },
     h('div', {},
       h('h1', {}, t('appTitle')),
-      h('p', { class: 'muted' }, t('tagline')),
+      h('p', { class: 'muted', style: { fontSize: '16px' } }, t('tagline')),
       h('p', { class: 'lead' }, t('intro')),
       h('p', { class: 'goal' }, t('goal'))),
-    h('div', { class: 'card', style: { padding: '8px' }, id: 'heroMap' })));
+    h('div', { class: 'card mapcard', id: 'heroMap' })));
   page.append(h('div', { class: 'menu' },
-    h('button', { class: 'tile primary', onclick: () => nav('newOnline') }, h('strong', {}, t('newOnline')), h('span', { class: 'muted small' }, `2–5 ${t('teams')} · ${t('online')}`)),
-    h('button', { class: 'tile', onclick: () => nav('join') }, h('strong', {}, t('joinGame')), h('span', { class: 'muted small' }, t('code'))),
-    h('button', { class: 'tile', onclick: () => nav('newLocal') }, h('strong', {}, t('localGame')), h('span', { class: 'muted small' }, `1–5 ${t('teams')} · ${t('local')}`)),
-    h('button', { class: 'tile', onclick: () => nav('history') }, h('strong', {}, t('history')), h('span', { class: 'muted small' }, '↺')),
-    h('button', { class: 'tile', onclick: () => nav('stats') }, h('strong', {}, t('stats')), h('span', { class: 'muted small' }, 'Σ')),
-    h('button', { class: 'tile', onclick: () => nav('rules') }, h('strong', {}, t('rules')), h('span', { class: 'muted small' }, t('rulesTitle')))));
-  const resume = h('div', { style: { marginTop: '16px' } });
+    h('button', { class: 'tile primary', onclick: () => nav('newOnline') }, h('strong', {}, t('newOnline')), h('span', { class: 'small' }, `2–5 ${t('teams')}, ${t('online')}`)),
+    h('button', { class: 'tile', onclick: () => nav('join') }, h('strong', {}, t('joinGame')), h('span', { class: 'small' }, t('joinHint'))),
+    h('button', { class: 'tile', onclick: () => nav('newLocal') }, h('strong', {}, t('localGame')), h('span', { class: 'small' }, `1–5 ${t('teams')}, ${t('localHint')}`)),
+    h('button', { class: 'tile', onclick: () => nav('history') }, h('strong', {}, t('history')), h('span', { class: 'small' }, t('historyHint'))),
+    h('button', { class: 'tile', onclick: () => nav('stats') }, h('strong', {}, t('stats')), h('span', { class: 'small' }, t('statsHint'))),
+    h('button', { class: 'tile', onclick: () => nav('rules') }, h('strong', {}, t('rules')), h('span', { class: 'small' }, t('rulesTitle')))));
+  const resume = h('div', { class: 'resume', style: { marginTop: '12px' } });
   page.append(resume);
   root.append(page);
   import('./ui/map-view.js').then(({ renderMap }) => renderMap(document.getElementById('heroMap'), { teamIdx: 0, elements: [], zezState: 'announced' }));
   // Offene Spiele zum Weiterspielen
   const localOpen = (() => { try { return JSON.parse(localStorage.getItem('lm-local-games') || '[]').filter((g) => g.status === 'running'); } catch { return []; } })();
-  const box = h('div', { class: 'card' }, h('h4', {}, t('resumeTitle')));
+  const box = h('div', { class: 'card' }, h('h3', { style: { marginBottom: '4px' } }, t('resumeTitle')));
   let any = false;
   for (const g of localOpen.slice(0, 3)) {
     any = true;
-    box.append(h('div', { class: 'row' }, h('span', {}, `${t('local')} · ${new Date(g.createdAt).toLocaleString()} · ${g.teamNames.length} ${t('teams')}`), h('span', { class: 'spacer' }), h('button', { class: 'btn small', onclick: () => nav('game', { mode: 'local', id: g.id }) }, t('open'))));
+    box.append(h('div', { class: 'rowline' }, h('span', {}, `${t('local')} · ${new Date(g.createdAt).toLocaleString()} · ${g.teamNames.length} ${t('teams')}`), h('span', { class: 'spacer' }), h('button', { class: 'btn small', onclick: () => nav('game', { mode: 'local', id: g.id }) }, t('open'))));
   }
   if (any) resume.append(box);
   OnlineBackend.myOpenGames().then((games) => {
     for (const g of games.slice(0, 3)) {
       if (!any) { resume.append(box); any = true; }
-      box.append(h('div', { class: 'row' }, h('span', {}, `${t('online')} · ${g.code} · ${g.status === 'lobby' ? t('stLobby') : t('stRunning')}`), h('span', { class: 'spacer' }), h('button', { class: 'btn small', onclick: () => nav(g.status === 'lobby' ? 'lobby' : 'game', { mode: 'online', id: g.id }) }, t('open'))));
+      box.append(h('div', { class: 'rowline' }, h('span', {}, `${t('online')} · ${g.code} · ${g.status === 'lobby' ? t('stLobby') : t('stRunning')}`), h('span', { class: 'spacer' }), h('button', { class: 'btn small', onclick: () => nav(g.status === 'lobby' ? 'lobby' : 'game', { mode: 'online', id: g.id }) }, t('open'))));
     }
   }).catch(() => {});
 }
@@ -365,9 +365,9 @@ async function Stats(root) {
       h('div', { class: 'kpi' }, h('div', { class: 'l' }, t('teamsPlayed')), h('div', { class: 'v' }, String(teams.length))),
       h('div', { class: 'kpi' }, h('div', { class: 'l' }, t('shareQualified')), h('div', { class: 'v' }, fmtPct(qualified))),
       h('div', { class: 'kpi' }, h('div', { class: 'l' }, t('winner')), h('div', { class: 'v' }, `${winners.length}/${same.length}`))),
-    h('div', { class: 'card', style: { marginTop: '12px' } }, h('h4', {}, t('avgKpis')),
+    h('div', { class: 'card', style: { marginTop: '12px' } }, h('h3', { style: { marginBottom: '8px' } }, t('avgKpis')),
       h('div', { class: 'kpis' }, KPI_KEYS.map((k) => h('div', { class: 'kpi' }, h('div', { class: 'l' }, t('kpi_' + k)), h('div', { class: 'v' }, fmtKpi(k, avg[k])))))),
-    h('div', { class: 'card' }, h('h4', {}, t('winnersBuilt')),
+    h('div', { class: 'card' }, h('h3', { style: { marginBottom: '8px' } }, t('winnersBuilt')),
       winners.length ? h('table', {}, h('thead', {}, h('tr', {}, h('th', {}, t('zone')), h('th', {}, 'Ø'))),
         h('tbody', {}, ZONES.map((z) => h('tr', {}, h('td', {}, t('zone_' + z)), h('td', { style: { textAlign: 'left' } }, Object.entries(built[z]).map(([k, n]) => `${t('el_' + k)} ${n.toFixed(1)}`).join(' · ') || '–')))))
         : h('p', { class: 'muted' }, '–')));
@@ -382,11 +382,12 @@ function Rules(root) {
   const row = (kind, fix, varc, cap, co2, fail, note) => h('tr', {}, h('td', {}, t('el_' + kind)), h('td', {}, fix), h('td', {}, varc), h('td', {}, cap), h('td', {}, co2), h('td', {}, fail), h('td', { style: { textAlign: 'left' } }, note));
   root.append(h('div', { class: 'page rulesheet' }, h('div', { class: 'card' },
     h('h1', {}, t('rulesTitle')),
-    h('p', { class: 'goal', style: { borderLeft: '4px solid var(--accent)', paddingLeft: '12px' } }, t('goal')),
+    h('p', { style: { fontSize: '15px', lineHeight: '22px', marginTop: '8px' } }, t('goal')),
     h('h3', {}, de ? 'Ablauf einer Runde' : 'Round flow'),
     h('ol', {},
-      h('li', {}, de ? 'Lage lesen: Ankündigungen, Lohnindex, eure Karte.' : 'Read the situation: announcements, wage index, your map.'),
-      h('li', {}, de ? `Bis zu ${c.actionsPerRound} Aktionen wählen und abgeben.` : `Choose up to ${c.actionsPerRound} actions and submit.`),
+      h('li', {}, de ? 'Lage lesen: Fahrplan mit den angekündigten Ereignissen, Prognose, Karte. Rote Felder bekommen in der Prognose Pakete vom Notfall-Subunternehmer.' : 'Read the situation: the timeline of announced events, the forecast, the map. Red fields get parcels from the emergency subcontractor in the forecast.'),
+      h('li', {}, de ? `Bis zu ${c.actionsPerRound} Aktionen wählen. Vor dem Hinzufügen zeigt das Spiel die Wirkung auf die Prognose dieser Runde.` : `Choose up to ${c.actionsPerRound} actions. Before you add one, the game shows its effect on this round's forecast.`),
+      h('li', {}, de ? 'Abgeben.' : 'Submit.'),
       h('li', {}, de ? 'Wenn alle abgegeben haben: Überraschung aufdecken, Runde wird berechnet.' : 'When everyone has submitted: the surprise is revealed and the round is calculated.'),
       h('li', {}, de ? 'Rundenbericht lesen – Ursachen pro Zone.' : 'Read the round report – causes per zone.')),
     h('p', {}, de ? `Ein Spiel hat ${c.rounds} Runden (wählbar 4–6). Jedes Team hat in jedem Feld eigene Pakete; niemand nimmt anderen etwas weg. Gemeinsam ist nur der Arbeitsmarkt: Je mehr Fahrer alle Teams zusammen beschäftigen, desto stärker steigen die Löhne für alle.`
@@ -419,5 +420,7 @@ function Rules(root) {
   setLang(getLang());
   try { CONFIG = await loadConfig(); } catch (e) { app.append(errorBox('config/params.json konnte nicht geladen werden.')); return; }
   const hash = new URLSearchParams(location.hash.slice(1));
-  if (hash.get('join')) nav('join', { code: hash.get('join') }); else nav('home');
+  if (hash.get('join')) nav('join', { code: hash.get('join') });
+  else if (hash.has('demo')) { const g = LocalBackend.createGame({ teamCount: 2, rounds: CONFIG.rounds, configVersion: CONFIG.version }); history.replaceState(null, '', location.pathname); nav('game', { mode: 'local', id: g.id }); }
+  else nav('home');
 })();

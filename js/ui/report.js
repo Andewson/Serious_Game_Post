@@ -1,7 +1,8 @@
 // Rundenbericht, Schlussbericht und kleine Diagramme.
-import { h, s, TEAM_COLORS, TEAM_HEX } from './dom.js';
+import { h, s, TEAM_COLORS, TEAM_HEX, icon } from './dom.js';
 import { t, fmtChf, fmtPct, fmtInt, fmtG } from '../i18n.js';
 import { ZONES, KPI_KEYS, cumulative, standardsOf, scoreGame } from '../engine.js';
+import { coverageBlock } from './coverage.js';
 
 export function fmtKpi(k, v) {
   if (k === 'costPerParcel') return fmtChf(v);
@@ -34,7 +35,7 @@ export function messageText(m) {
 
 export function standardsPills(state, std) {
   const S = state.config.standards;
-  const pill = (ok, label) => h('span', { class: `pill ${ok ? 'ok' : 'bad'}` }, ok ? '✓' : '✗', ' ', label);
+  const pill = (ok, label) => h('span', { class: `pill ${ok ? 'ok' : 'bad'}` }, icon(ok ? 'check' : 'x', 10), ' ', label);
   return h('div', { class: 'stds' },
     pill(std.onTimeNational, t('std_onTimeNational', { v: fmtPct(S.onTimeNational) })),
     ...ZONES.map((z) => pill(std.zones[z], t('std_zone', { zone: t('zone_' + z), v: fmtPct(S.onTimeZone) }))),
@@ -52,21 +53,31 @@ export function verdict(state, std) {
 }
 
 function kpiTiles(rep, prevRep, cum) {
-  return h('div', { class: 'kpis' }, KPI_KEYS.map((k) => {
+  return h('div', { class: 'kpistrip four' }, KPI_KEYS.map((k) => {
     let delta = null;
     if (prevRep) {
       const d = rep.kpis[k] - prevRep.kpis[k];
       if (Math.abs(d) > 1e-6) {
         const good = d * better[k] > 0;
-        const txt = k === 'costPerParcel' ? (d > 0 ? '+' : '') + d.toFixed(2) : k === 'co2PerParcel' ? (d > 0 ? '+' : '') + Math.round(d) + ' g' : (d > 0 ? '+' : '') + (d * 100).toFixed(1) + ' Pkt.';
-        delta = h('span', { class: `delta ${good ? 'good' : 'bad'}` }, ' ', txt);
+        const a = Math.abs(d); const sign = d > 0 ? '+' : '−';
+        const txt = k === 'costPerParcel' ? `${sign}${a.toFixed(2)}` : k === 'co2PerParcel' ? `${sign}${Math.round(a)} g` : `${sign}${(a * 100).toFixed(1)} Pkt.`;
+        delta = h('span', { class: good ? 'good' : 'bad' }, txt);
       }
     }
-    return h('div', { class: 'kpi' },
-      h('div', { class: 'l' }, t('kpi_' + k)),
-      h('div', { class: 'v' }, fmtKpi(k, rep.kpis[k])),
-      h('div', { class: 'c' }, delta, cum ? h('span', {}, delta ? ' · Ø ' : 'Ø ', fmtKpi(k, cum.kpis[k])) : null));
+    return h('div', {},
+      h('div', { class: 'kpi-l' }, t('kpi_' + k)),
+      h('div', { class: 'kpi-v ink' }, fmtKpi(k, rep.kpis[k])),
+      h('div', { class: 'kpi-c' }, delta, cum ? h('span', {}, delta ? ' · Ø ' : 'Ø ', fmtKpi(k, cum.kpis[k])) : null));
   }));
+}
+
+export function standardsList(state, std, cum) {
+  const S = state.config.standards;
+  const row = (ok, label, val) => h('div', { class: 'r' }, h('span', { class: `mark ${ok ? 'ok' : 'bad'}` }, icon(ok ? 'check' : 'x', 10)), h('span', {}, label), val ? h('span', { class: `v ${ok ? '' : 'bad'}` }, val) : null);
+  return h('div', { class: 'stdlist' },
+    row(std.onTimeNational, t('std_onTimeNational', { v: fmtPct(S.onTimeNational) }), cum ? fmtPct(cum.kpis.onTime, 1) : ''),
+    ...ZONES.map((z) => row(std.zones[z], t('std_zone', { zone: t('zone_' + z), v: fmtPct(S.onTimeZone) }), cum ? fmtPct(cum.zoneKpis[z].onTime, 1) : '')),
+    row(std.cost, t('std_cost', { v: state.config.tariffPerParcel.toFixed(2) }), cum ? fmtChf(cum.kpis.costPerParcel) : ''));
 }
 
 function zoneTable(state, rep) {
@@ -78,9 +89,9 @@ function zoneTable(state, rep) {
       const m = tariff * rep.zones[z].parcels - rep.zones[z].cost;
       return h('tr', {},
         h('td', {}, t('zone_' + z)), h('td', {}, fmtInt(rep.zones[z].parcels)),
-        h('td', { style: { color: zk.onTime < state.config.standards.onTimeZone ? 'var(--bad)' : '' } }, fmtPct(zk.onTime)),
+        h('td', { class: zk.onTime < state.config.standards.onTimeZone ? 'bad' : '' }, fmtPct(zk.onTime)),
         h('td', {}, fmtPct(zk.failRate, 1)), h('td', {}, fmtChf(zk.costPerParcel)), h('td', {}, fmtG(zk.co2PerParcel)),
-        h('td', { style: { color: m < 0 ? 'var(--bad)' : 'var(--ok)' } }, (m >= 0 ? '+' : '') + fmtInt(m)));
+        h('td', { class: m < 0 ? 'bad' : '' }, (m >= 0 ? '+' : '−') + fmtInt(Math.abs(m))));
     })));
 }
 
@@ -96,7 +107,7 @@ function utilTable(rep) {
   return h('table', {},
     h('thead', {}, h('tr', {}, h('th', {}, t('element')), h('th', {}, t('location')), h('th', {}, t('utilization')))),
     h('tbody', {}, rep.utilization.map((u) => h('tr', {},
-      h('td', {}, t('el_' + u.kind)), h('td', {}, u.field), h('td', { style: { color: u.used / u.capacity < 0.4 ? 'var(--warn)' : '' } }, fmtPct(u.capacity ? u.used / u.capacity : 0))))));
+      h('td', {}, t('el_' + u.kind)), h('td', {}, u.field), h('td', { class: u.used / u.capacity < 0.4 ? 'bad' : '' }, fmtPct(u.capacity ? u.used / u.capacity : 0))))));
 }
 
 export function comparisonTable(state, mySlots = []) {
@@ -109,7 +120,7 @@ export function comparisonTable(state, mySlots = []) {
       return h('tr', { class: mySlots.includes(team.idx) ? 'me' : '' },
         h('td', {}, h('span', { class: 'row', style: { gap: '6px' } }, h('span', { class: 'dot', style: { background: TEAM_COLORS[team.idx] } }), team.name)),
         ...KPI_KEYS.map((k) => h('td', {}, team.reports.length ? fmtKpi(k, cum.kpis[k]) : '–')),
-        h('td', {}, h('span', { class: `pill ${n === 5 ? 'ok' : 'bad'}` }, `${n}/5`)));
+        h('td', {}, h('span', { class: `pill ${n === 5 ? 'ok' : 'bad'}` }, `${n} / 5`)));
     })));
 }
 
@@ -124,21 +135,24 @@ export function roundReportView(state, slot, round, { onClose, closeLabel, mySlo
   const m = rep.market || {};
   return h('div', { class: 'stack' },
     shock
-      ? h('div', { class: 'shock' }, h('div', { class: 'small muted' }, t('shockTitle')), h('div', { class: 'headline' }, eventTitle(shock)), h('div', {}, eventDesc(shock, state.config)))
-      : h('div', { class: 'shock calm' }, h('div', { class: 'headline' }, t('noShock'))),
+      ? h('div', { class: 'shock' }, h('div', { class: 'small' }, t('shockTitle')), h('div', { class: 'headline' }, eventTitle(shock)), h('div', {}, eventDesc(shock, state.config)))
+      : h('div', { class: 'shock calm' }, t('noShock')),
     kpiTiles(rep, prev, cum),
-    h('div', { class: 'card' }, h('h4', {}, t('standards'), ' (Ø)'), standardsPills(state, std), h('p', { class: 'small', style: { marginTop: '8px', marginBottom: 0 } }, verdict(state, std))),
-    h('div', { class: 'card' }, h('h4', {}, t('keyPoints')), h('div', { class: 'msgs' }, rep.messages.map((msg) => h('div', { class: `msg ${msg.code === 'allGood' ? 'good' : ''}` }, messageText(msg))))),
-    h('div', { class: 'card' }, h('h4', {}, t('zones')), zoneTable(state, rep)),
     h('div', { class: 'grid2' },
-      h('div', { class: 'card' }, h('h4', {}, t('costBreakdown')), costBars(rep),
-        h('p', { class: 'small muted', style: { marginTop: '10px', marginBottom: 0 } }, `${t('lastMileShare')}: ${fmtPct(share)}`)),
-      h('div', { class: 'card' }, h('h4', {}, t('wage')),
+      h('div', { class: 'card' }, h('h3', {}, t('keyPoints')), h('div', { class: 'msgs' }, rep.messages.map((msg) => h('div', { class: `msg ${msg.code === 'allGood' ? 'good' : ''}` }, messageText(msg))))),
+      h('div', { class: 'card' }, h('h3', {}, t('standards'), h('span', { class: 'muted', style: { fontWeight: 400 } }, ' (Ø)')), standardsList(state, std, cum), h('p', { class: 'verdict' }, verdict(state, std)))),
+    h('div', { class: 'grid2' },
+      h('div', { class: 'card' }, h('h3', {}, t('coverageTitle')), coverageBlock(rep)),
+      h('div', { class: 'card' }, h('h3', {}, t('costBreakdown')), costBars(rep),
+        h('p', { class: 'note' }, `${t('lastMileShare')}: ${fmtPct(share)}`))),
+    h('div', { class: 'card', style: { overflowX: 'auto' } }, h('h3', {}, t('zones')), zoneTable(state, rep)),
+    h('div', { class: 'grid2' },
+      h('div', { class: 'card' }, h('h3', {}, t('marketTitle')),
         h('p', {}, `${t('drivers')}: ${m.drivers ?? '–'} · ${t('marketLoad')}: ${m.load ? fmtPct(m.load) : '–'}`),
         h('p', {}, `${t('wage')}: ${(m.wage ?? 1).toFixed(3)} → ${(m.nextWage ?? 1).toFixed(3)} (+${((m.growth ?? 0) * 100).toFixed(1)} %)`),
-        h('p', { class: 'small muted', style: { marginBottom: 0 } }, `${t('el_vanDiesel')}/${t('el_vanE')}: 1, Hub: 2`))),
-    h('details', { class: 'card' }, h('summary', {}, t('utilization')), utilTable(rep)),
-    h('div', { class: 'card' }, h('h4', {}, t('comparison')), comparisonTable(state, mySlots)),
+        h('p', { class: 'note' }, t('driversNote'))),
+      h('details', { class: 'card' }, h('summary', {}, t('utilization')), utilTable(rep))),
+    h('div', { class: 'card', style: { overflowX: 'auto' } }, h('h3', {}, t('comparison')), comparisonTable(state, mySlots)),
     onClose ? h('div', { class: 'row' }, h('span', { class: 'spacer' }), h('button', { class: 'btn primary', onclick: onClose }, closeLabel || t('close'))) : null);
 }
 
@@ -153,13 +167,13 @@ export function lineChart(state, k) {
   const x = (i) => P + (i * (W - P - 8)) / Math.max(1, n - 1);
   const y = (v) => H - 18 - ((v - lo) / (hi - lo)) * (H - 18 - TOP);
   const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, class: 'chart' },
-    s('text', { x: 4, y: 12, style: 'font-weight:650;fill:#1d272b' }, t('kpi_' + k)),
-    s('line', { x1: P, x2: W - 8, y1: H - 18, y2: H - 18, stroke: '#e3ddd0' }),
+    s('text', { x: 4, y: 12, style: 'font-weight:600;fill:#0a0a0a;font-size:11px' }, t('kpi_' + k)),
+    s('line', { x1: P, x2: W - 8, y1: H - 18, y2: H - 18, stroke: '#d4d4d4' }),
     ...Array.from({ length: n }, (_, i) => s('text', { x: x(i), y: H - 4, 'text-anchor': 'middle' }, `R${i + 1}`)),
     s('text', { x: P - 4, y: y(hi) + 3, 'text-anchor': 'end' }, fmtKpi(k, hi).replace('CHF ', '')),
     s('text', { x: P - 4, y: y(lo) + 3, 'text-anchor': 'end' }, fmtKpi(k, lo).replace('CHF ', '')),
     ...series.map((vals, ti) => s('polyline', { points: vals.map((v, i) => `${x(i)},${y(v)}`).join(' '), fill: 'none', stroke: TEAM_HEX[ti], 'stroke-width': 2.2 })),
-    ...series.flatMap((vals, ti) => vals.map((v, i) => s('circle', { cx: x(i), cy: y(v), r: 2.6, fill: TEAM_HEX[ti] }))));
+    ...series.flatMap((vals, ti) => vals.map((v, i) => s('circle', { cx: x(i), cy: y(v), r: 2, fill: TEAM_HEX[ti] }))));
   return svg;
 }
 
@@ -170,7 +184,7 @@ export function finalReportView(state, { mySlots = [], onHome, onExport } = {}) 
     winner
       ? h('div', { class: 'winner' }, h('div', { class: 'small' }, t('winner')), h('h2', {}, winner.name), h('div', {}, `${t('points')}: ${winner.points.toFixed(1)}`))
       : h('div', { class: 'notice' }, t('noWinner')),
-    h('div', { class: 'card' },
+    h('div', { class: 'card', style: { overflowX: 'auto' } },
       h('table', {},
         h('thead', {}, h('tr', {}, h('th', {}, t('rank')), h('th', { class: 'l' }, t('teams')), ...KPI_KEYS.map((k) => h('th', {}, t('kpi_' + k))), h('th', {}, t('standards')), h('th', {}, t('points')))),
         h('tbody', {}, score.ranking.map((tm, i) => {
@@ -183,13 +197,13 @@ export function finalReportView(state, { mySlots = [], onHome, onExport } = {}) 
             h('td', {}, h('strong', {}, tm.points.toFixed(1))));
         })))),
     h('div', { class: 'grid2' }, score.ranking.map((tm) => h('div', { class: 'card' },
-      h('h3', { class: 'row', style: { gap: '8px' } }, h('span', { class: 'dot', style: { background: TEAM_COLORS[tm.idx] } }), tm.name),
-      standardsPills(state, tm.standards),
-      h('p', { class: 'small', style: { marginTop: '8px' } }, verdict(state, tm.standards)),
-      h('p', { class: 'small muted', style: { marginBottom: 0 } },
+      h('h3', { class: 'row', style: { gap: '8px', marginBottom: '8px' } }, h('span', { class: 'dot', style: { background: TEAM_COLORS[tm.idx] } }), tm.name),
+      standardsList(state, tm.standards, tm.cum),
+      h('p', { class: 'verdict' }, verdict(state, tm.standards)),
+      h('p', { class: 'note' },
         `${t('margin')}: ${ZONES.map((z) => `${t('zone_' + z)} ${tm.margin[z] >= 0 ? '+' : ''}${fmtInt(tm.margin[z])}`).join(' · ')}`, h('br'),
         `${t('lastMileShare')}: ${fmtPct(tm.lastMileShare)}`)))),
-    h('div', { class: 'card' }, h('h4', {}, t('perRound')), h('div', { class: 'grid2' }, KPI_KEYS.map((k) => lineChart(state, k))),
+    h('div', { class: 'card' }, h('h3', {}, t('perRound')), h('div', { class: 'grid2' }, KPI_KEYS.map((k) => lineChart(state, k))),
       h('div', { class: 'legend' }, state.teams.map((tm) => h('span', {}, h('span', { class: 'dot', style: { background: TEAM_COLORS[tm.idx] } }), tm.name)))),
     h('div', { class: 'row' },
       onExport ? h('button', { class: 'btn', onclick: onExport }, t('export')) : null,

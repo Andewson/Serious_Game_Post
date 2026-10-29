@@ -10,6 +10,9 @@ Kosten pro Paket, Pünktlichkeit, CO₂ pro Paket und Fehlzustellungen.
 - **Auf einem Gerät (1–5 Teams):** «Spiel auf einem Gerät», die Teams wechseln sich ab. Läuft auch ohne Internet.
 - **Ablauf:** 4 Runden (wählbar 4–6), pro Runde 2 Aktionen. Sobald alle abgegeben haben, wird die Runde berechnet; Überraschungen werden erst dann aufgedeckt.
 - **Gewinnen:** nur wer alle Mindeststandards erfüllt (Pünktlichkeit landesweit ≥ 90 %, jede Zone ≥ 80 %, Kosten ≤ Tarif); dann zählen die Rangpunkte.
+- **Planen mit Prognose:** Rechts zeigt das Spiel die Kennzahlen der laufenden Runde mit eurem Plan, die Mindeststandards, wer in jeder Zone zustellt und einen Ausblick auf die nächste Runde. Gerechnet wird mit dem echten Rechenkern, aber nur mit Angekündigtem: Überraschungen bleiben verborgen.
+- **Optionen vergleichen:** Links stehen alle Aktionen mit Kosten pro Paket (voll ausgelastet), Kapazität und CO₂, umschaltbar nach Zone, plus eine Vergleichstabelle. Vor dem Hinzufügen zeigt der Konfigurator die Wirkung auf die Prognose.
+- **Ausprobieren:** `…/Serious_Game_Post/#demo` startet sofort ein lokales Probespiel mit zwei Teams.
 - Zwei Durchgänge und Debriefing macht die Moderation ausserhalb des Spiels: einfach ein neues Spiel starten.
 
 ## Zahlen ändern (Balancing)
@@ -24,6 +27,8 @@ Kosten pro Paket, Pünktlichkeit, CO₂ pro Paket und Fehlzustellungen.
 | --- | --- |
 | `index.html`, `css/`, `js/ui/` | Oberfläche (ohne Build-Schritt, läuft direkt im Browser) |
 | `js/engine.js` | Rechenkern: deterministisch, gleiche Eingaben ergeben überall dasselbe Ergebnis |
+| `js/forecast.js` | Prognose, Ausblick und Kennzahlen pro Option (ohne verborgene Ereignisse) |
+| `fonts/` | Schrift Geist (SIL Open Font License), lokal, damit das Spiel auch offline gleich aussieht |
 | `js/map.js` | Sechseckkarte (7 Stadt-, 11 Agglo-, 15 Landfelder) |
 | `config/params.json` | alle Spielzahlen |
 | `js/backend-online.js`, `supabase/` | Online-Modus über Supabase (Tabellen, Zugriffsregeln, Funktionen) |

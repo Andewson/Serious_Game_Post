@@ -34,4 +34,10 @@ export function s(tag, attrs = {}, ...children) {
 }
 export function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); return el; }
 export const TEAM_COLORS = ['var(--t0)', 'var(--t1)', 'var(--t2)', 'var(--t3)', 'var(--t4)'];
-export const TEAM_HEX = ['#2563eb', '#d9480f', '#7c3aed', '#0f8a7e', '#be185d'];
+export const TEAM_HEX = ['#c8611a', '#12807a', '#b8324f', '#3b6fc4', '#8a6d10'];
+
+// Kleine Strich-Icons (statt Schriftzeichen), erben die Textfarbe
+export function icon(name, size = 12) {
+  const paths = { check: 'M3 8.5l3.2 3L13 4.5', x: 'M4 4l8 8M12 4l-8 8' };
+  return s('svg', { viewBox: '0 0 16 16', width: size, height: size, 'aria-hidden': 'true', fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', class: 'ic', style: 'display:block' }, s('path', { d: paths[name] }));
+}

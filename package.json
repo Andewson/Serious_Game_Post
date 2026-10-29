@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Serious Game «Redesign the Last Mile» – HSG, Design und Management von globalen Supply Chains, HS 2026",
   "scripts": {
-    "test": "node --test tests/engine.test.mjs",
+    "test": "node --test tests/engine.test.mjs tests/forecast.test.mjs",
     "simulate": "node tools/simulate.mjs 60",
     "serve": "python3 -m http.server 8080"
   }

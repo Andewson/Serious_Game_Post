@@ -66,6 +66,29 @@ const DICT = {
     rulesTitle: 'Spielregeln auf einer Seite',
     parcels: 'Pakete', element: 'Element', location: 'Standort',
     legend: 'Legende', you: 'Euer Team', lang: 'EN', confirmLeave: 'Spiel verlassen? Ihr könnt mit dem Code zurückkehren.', tutorialHint: 'Tipp: Fahrt mit der Maus über die Karte, um Reichweiten zu sehen.',
+    forecastTitle: 'Prognose Runde {r}', forecastNote: 'Mit eurem Plan, ohne Überraschungen dieser Runde. Exakt, solange nichts Unerwartetes passiert.',
+    lastRoundShort: 'Runde {r}: {v}', withoutPlan: 'ohne Plan {v}', standardsCum: 'Mindeststandards', standardsCumNote: 'Durchschnitt aller Runden inklusive Prognose',
+    coverageTitle: 'Wer stellt zu?', src_own: 'Eigene Fahrzeuge', src_box: 'Paketboxen', src_post: 'Post', src_crowd: 'Crowd', src_emergency: 'Notfall',
+    emergencyShare: '{n} Pakete beim Notfall-Subunternehmer', coverFig: '{n} Pakete',
+    planTitle: 'Euer Plan', slotFree: 'Freier Platz: Aktion links wählen', slotFreeS: 'Freier Platz: Aktion unten wählen', planCount: '{n} von {max} Aktionen',
+    submitRound: 'Runde {r} abgeben', submitEmpty: 'Ohne Aktion abgeben', confirmEmpty: 'Wirklich ohne Aktion abgeben? Euer Netz bleibt, wie es ist.', confirmYes: 'Ja, abgeben',
+    optionsTitle: 'Aktionen', figuresFor: 'Kennzahlen für', compareAll: 'Alle Optionen vergleichen',
+    colFull: 'CHF pro Paket', colCap: 'Pakete pro Runde', colCo2: 'g CO₂ pro Paket',
+    optsNote: 'CHF/Paket: Fixkosten verteilt auf die volle Kapazität plus Fahrt- und Nachschubkosten. Halb ausgelastet kostet ein Paket deutlich mehr.',
+    opt_vanDiesel: 'Diesel-Vans einsetzen', opt_vanE: 'E-Vans einsetzen', opt_convert: 'Diesel-Vans auf E umrüsten', opt_hub: 'Micro-Hub bauen', opt_box: 'Paketboxen ausrollen', opt_post: 'Post-Vertrag abschliessen', opt_crowd: 'Crowd-Fahrer buchen', opt_service: 'Zeitfenster einführen', opt_serviceOff: 'Zeitfenster aufheben', opt_emergency: 'Notfall-Subunternehmer',
+    why_vanDiesel: 'Günstiges Leasing, viel CO₂, Reichweite 2 Felder.', why_vanE: 'Teureres Leasing, wenig CO₂, darf in die Null-Emissions-Zone.', why_convert: 'Alle Diesel-Vans eines Standorts werden E-Vans.', why_hub: 'Cargo-Bikes in der Stadt, Reichweite 1 Feld.', why_box: 'Kundschaft holt bis zu {acc} selbst ab.', why_post: 'Übernimmt auf dem Land, was eure Fahrzeuge nicht schaffen.', why_crowd: 'Nur diese Runde, ohne Fixkosten.', why_service: 'Halbiert Fehlzustellungen, kostet Kapazität.', why_emergency: 'Springt ein, wenn Kapazität fehlt. Immer verspätet.',
+    blocked_zez: 'In der Stadt verboten (Null-Emissions-Zone)', blocked_cityOnly: 'Nur in der Stadt', blocked_landOnly: 'Nur auf dem Land', blocked_lastRound: 'Wirkt nicht mehr (letzte Runde)', blocked_noDiesel: 'Keine Diesel-Vans im Netz', blocked_exists: 'Schon vorhanden', blocked_planned: 'Schon im Plan',
+    serviceFig: '−{cap} Kapazität · Fehlzustellungen {a} → {b}', fromNow: 'sofort', fromNext: 'ab Runde {r}', thisRoundOnly: 'nur Runde {r}',
+    backToList: 'Alle Aktionen', pickOnMap: 'Feld auf der Karte wählen', pickBanner: '{what}: Feld wählen', pickedField: 'Standort {id} · {zone}', chooseArea: 'Gebiet',
+    spec_fixed: 'Fixkosten pro Runde', spec_capacity: 'Kapazität pro Runde', spec_full: 'Kosten pro Paket bei voller Auslastung', spec_variable: 'davon Fahrt und Nachschub', spec_co2: 'CO₂ pro Paket', spec_onTime: 'Pünktlich zugestellt', spec_range: 'Reichweite', spec_from: 'Wirkt', spec_tax: 'davon CO₂-Abgabe',
+    specZone: 'Werte für die Zone {zone}', perVehicle: 'pro Fahrzeug', perHub: 'pro Hub', nVehicles: 'für {n} Fahrzeuge',
+    effectTitle: 'Wirkung auf Runde {r}', effectNeedsField: 'Wählt einen Standort, dann seht ihr die Wirkung auf eure Prognose.', effectLater: 'Baut sich diese Runde auf und liefert ab Runde {r}; diese Runde kostet es noch nichts. Werte: Ausblick auf Runde {r}.',
+    addToPlan: 'In den Plan', planFull: 'Euer Plan ist voll. Entfernt zuerst eine Aktion.',
+    networkTitle: 'Euer Netz', colLocation: 'Standort', colElement: 'Element', colCount: 'Anzahl', colStatus: 'Status', colUtil: 'Auslastung', colFixed: 'Fixkosten', colRemove: 'Abbauen',
+    removeHint: 'Abbau wirkt ab der nächsten Runde; was im Bau ist, wird sofort storniert.', removeAdd: '{n} zum Abbau in den Plan', utilNote: 'Auslastung gemäss Prognose dieser Runde. Unter 40 % zahlt ihr Fixkosten ohne Nutzen.',
+    fieldDemand: 'Pakete diese Runde', fieldServed: 'Wer liefert', fieldNone: 'Niemand', legendEmergency: 'Notfall in der Prognose', legendPick: 'wählbar',
+    wageUp: 'Löhne +{p} seit Start', reportOf: 'Bericht Runde {r}', compareTitle: 'Alle Optionen im Vergleich', compareNote: 'Pro Fahrzeug, Hub oder Vertrag und Runde, mit Standard-Servicepolitik, aktuellen Löhnen und den Regeln, die jetzt gelten.',
+    waitingTitle: 'Abgegeben', kpiDelta: '{d} gegenüber ohne Plan', inRound: 'Runde {r}', boxesIn: 'Paketboxen · {area}', nothingYet: 'Noch keine Runde gespielt', vsNoPlan: 'gegenüber ohne Plan', plannedEl: 'Neu aus eurem Plan', field: 'Feld', vsThisRound: 'gegenüber dieser Runde', outlookTitle: 'Ausblick Runde {r}', outlookNote: 'Wenn ihr nach diesem Plan nichts mehr ändert: mit den angekündigten Ereignissen, ohne Überraschungen, Löhne geschätzt.', outlookAll: 'Alle Pakete sind mit eigener Kapazität oder Verträgen gedeckt.', outlookEm: '{zone}: {n} Pakete beim Notfall-Subunternehmer', colFullS: 'CHF/Paket', colCapS: 'Pakete', colCo2S: 'g CO₂', spec_fullS: 'Pro Paket, voll ausgelastet', el_postShort: 'Post-Vertrag', evShort_zez: 'Null-Emissions-Zone', evShort_peak: 'Black Friday', evShort_co2tax: 'CO₂-Abgabe', evShort_boxBoom: 'Boxen beliebter', evShort_strike: 'Streik', evShort_fuel: 'Treibstoffschock', evShort_shortage: 'Fahrermangel', evShort_demandSurge: 'Nachfrageschub', joinHint: 'Mit dem Code des eröffnenden Teams', localHint: 'abwechselnd am selben Gerät, auch offline', historyHint: 'Schlussberichte abgeschlossener Spiele', statsHint: 'Was über alle Spiele funktioniert hat', change: 'ändern', perField: '(pro Feld)', perAllRegions: '(3 Landregionen)', driversNote: 'Fahrer pro Element: Van 1, Hub 2.', marketTitle: 'Arbeitsmarkt und Löhne',
     versionMismatch: 'Achtung: Dieses Spiel wurde mit Regelversion {a} erstellt, ihr nutzt {b}.'
   },
   en: {
@@ -134,6 +157,29 @@ const DICT = {
     rulesTitle: 'Rules on one page',
     parcels: 'Parcels', element: 'Element', location: 'Location',
     legend: 'Legend', you: 'Your team', lang: 'DE', confirmLeave: 'Leave the game? You can return with the code.', tutorialHint: 'Tip: hover over the map to see ranges.',
+    forecastTitle: 'Forecast round {r}', forecastNote: 'With your plan, without this round\'s surprises. Exact unless something unexpected happens.',
+    lastRoundShort: 'Round {r}: {v}', withoutPlan: 'without plan {v}', standardsCum: 'Minimum standards', standardsCumNote: 'Average of all rounds including the forecast',
+    coverageTitle: 'Who delivers?', src_own: 'Own vehicles', src_box: 'Parcel lockers', src_post: 'Postal service', src_crowd: 'Crowd', src_emergency: 'Emergency',
+    emergencyShare: '{n} parcels with the emergency subcontractor', coverFig: '{n} parcels',
+    planTitle: 'Your plan', slotFree: 'Free slot: pick an action on the left', slotFreeS: 'Free slot: pick an action below', planCount: '{n} of {max} actions',
+    submitRound: 'Submit round {r}', submitEmpty: 'Submit without action', confirmEmpty: 'Really submit without an action? Your network stays as it is.', confirmYes: 'Yes, submit',
+    optionsTitle: 'Actions', figuresFor: 'Figures for', compareAll: 'Compare all options',
+    colFull: 'CHF per parcel', colCap: 'Parcels per round', colCo2: 'g CO₂ per parcel',
+    optsNote: 'CHF/parcel: fixed cost spread over full capacity plus driving and resupply cost. Half-used, a parcel costs much more.',
+    opt_vanDiesel: 'Deploy diesel vans', opt_vanE: 'Deploy e-vans', opt_convert: 'Convert diesel vans to electric', opt_hub: 'Build micro-hub', opt_box: 'Roll out parcel lockers', opt_post: 'Sign postal contract', opt_crowd: 'Book crowd drivers', opt_service: 'Introduce time windows', opt_serviceOff: 'Drop time windows', opt_emergency: 'Emergency subcontractor',
+    why_vanDiesel: 'Cheap lease, lots of CO₂, range 2 fields.', why_vanE: 'Higher lease, little CO₂, allowed in the zero-emission zone.', why_convert: 'All diesel vans at one location become e-vans.', why_hub: 'Cargo bikes in the city, range 1 field.', why_box: 'Customers pick up to {acc} themselves.', why_post: 'In the countryside, takes what your vehicles cannot.', why_crowd: 'This round only, no fixed cost.', why_service: 'Halves failed deliveries, costs capacity.', why_emergency: 'Steps in when capacity is missing. Always late.',
+    blocked_zez: 'Banned in the city (zero-emission zone)', blocked_cityOnly: 'City only', blocked_landOnly: 'Countryside only', blocked_lastRound: 'No effect any more (last round)', blocked_noDiesel: 'No diesel vans in the network', blocked_exists: 'Already in place', blocked_planned: 'Already planned',
+    serviceFig: '−{cap} capacity · failed {a} → {b}', fromNow: 'now', fromNext: 'from round {r}', thisRoundOnly: 'round {r} only',
+    backToList: 'All actions', pickOnMap: 'Pick a field on the map', pickBanner: '{what}: pick a field', pickedField: 'Location {id} · {zone}', chooseArea: 'Area',
+    spec_fixed: 'Fixed cost per round', spec_capacity: 'Capacity per round', spec_full: 'Cost per parcel at full use', spec_variable: 'of which driving and resupply', spec_co2: 'CO₂ per parcel', spec_onTime: 'Delivered on time', spec_range: 'Range', spec_from: 'Effective', spec_tax: 'of which CO₂ levy',
+    specZone: 'Figures for the {zone} zone', perVehicle: 'per vehicle', perHub: 'per hub', nVehicles: 'for {n} vehicles',
+    effectTitle: 'Effect on round {r}', effectNeedsField: 'Pick a location to see the effect on your forecast.', effectLater: 'Builds up this round and delivers from round {r}; it costs nothing yet this round. Figures: outlook for round {r}.',
+    addToPlan: 'Add to plan', planFull: 'Your plan is full. Remove an action first.',
+    networkTitle: 'Your network', colLocation: 'Location', colElement: 'Element', colCount: 'Count', colStatus: 'Status', colUtil: 'Utilisation', colFixed: 'Fixed cost', colRemove: 'Remove',
+    removeHint: 'Removal takes effect next round; anything under construction is cancelled at once.', removeAdd: 'Add {n} removals to the plan', utilNote: 'Utilisation as forecast for this round. Below 40 % you pay fixed costs for nothing.',
+    fieldDemand: 'Parcels this round', fieldServed: 'Delivered by', fieldNone: 'Nobody', legendEmergency: 'Emergency in the forecast', legendPick: 'selectable',
+    wageUp: 'Wages +{p} since start', reportOf: 'Report round {r}', compareTitle: 'All options compared', compareNote: 'Per vehicle, hub or contract and round, with standard service policy, current wages and the rules in force now.',
+    waitingTitle: 'Submitted', kpiDelta: '{d} vs. without plan', inRound: 'Round {r}', boxesIn: 'Parcel lockers · {area}', nothingYet: 'No round played yet', vsNoPlan: 'vs. without plan', plannedEl: 'New from your plan', field: 'field', vsThisRound: 'vs. this round', outlookTitle: 'Outlook round {r}', outlookNote: 'If you change nothing after this plan: with announced events, without surprises, wages estimated.', outlookAll: 'All parcels are covered by your own capacity or contracts.', outlookEm: '{zone}: {n} parcels with the emergency subcontractor', colFullS: 'CHF/parcel', colCapS: 'Parcels', colCo2S: 'g CO₂', spec_fullS: 'Per parcel, fully used', el_postShort: 'Postal contract', evShort_zez: 'Zero-emission zone', evShort_peak: 'Black Friday', evShort_co2tax: 'CO₂ levy', evShort_boxBoom: 'Lockers popular', evShort_strike: 'Strike', evShort_fuel: 'Fuel shock', evShort_shortage: 'Driver shortage', evShort_demandSurge: 'Demand surge', joinHint: 'With the host team\'s code', localHint: 'taking turns on one device, works offline', historyHint: 'Final reports of finished games', statsHint: 'What worked across all games', change: 'change', perField: '(per field)', perAllRegions: '(3 rural regions)', driversNote: 'Drivers per element: van 1, hub 2.', marketTitle: 'Labour market and wages',
     versionMismatch: 'Note: this game was created with rules version {a}, you are using {b}.'
   }
 };
@@ -152,7 +198,8 @@ export function t(key, params = {}) {
   const s = (DICT[lang] && DICT[lang][key]) ?? DICT.de[key] ?? key;
   return s.replace(/\{(\w+)\}/g, (_, k) => (params[k] !== undefined ? params[k] : `{${k}}`));
 }
-export function fmtChf(x) { return (lang === 'de' ? 'CHF ' : 'CHF ') + Number(x).toFixed(2); }
+export function fmtChf(x) { return 'CHF ' + Number(x).toFixed(2); }
+export function fmtMoney(x) { return 'CHF ' + Math.round(x).toLocaleString(lang === 'de' ? 'de-CH' : 'en-GB'); }
 export function fmtPct(x, d = 0) { return (x * 100).toFixed(d) + ' %'; }
 export function fmtInt(x) { return Math.round(x).toLocaleString(lang === 'de' ? 'de-CH' : 'en-GB'); }
 export function fmtG(x) { return Math.round(x) + ' g'; }

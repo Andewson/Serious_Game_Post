@@ -1,11 +1,14 @@
 // SVG-Karte mit Zonen, Null-Emissions-Zone, eigenen Elementen und Reichweiten-Vorschau.
-import { s, clear, TEAM_HEX } from './dom.js';
+import { s, clear } from './dom.js';
 import { buildMap, fieldsInRange } from '../map.js';
 import { t } from '../i18n.js';
 
 const SIZE = 30;
 const SQ3 = Math.sqrt(3);
-const ZONE_FILL = { stadt: '#d9d2c3', agglo: '#dbe8c6', land: '#b3d49a', see: '#a9cfe9', berg: '#cbc3b7' };
+const ZONE_FILL = { stadt: '#ddd6c8', agglo: '#e2ecd3', land: '#bcd9a4', see: '#b9d7ec', berg: '#d3ccc1' };
+const HUE = '#1d5fbf';
+const INK = '#141414';
+const NEG = '#c4242a';
 
 export function center(f) {
   return { x: SIZE * SQ3 * (f.q + f.r / 2), y: SIZE * 1.5 * f.r };
@@ -43,7 +46,8 @@ function defs() {
 }
 
 // opts: { teamIdx, elements, crowd(this round), post, zezState: 'none'|'announced'|'active',
-//   selectable: fieldId => bool, selectedField, rangePreview: {range, zones}|null, onSelect, fieldStatus: {fieldId: 'bad'|'ok'} }
+//   selectable: fieldId => bool, selectedField, rangePreview: {range, zones}|null, onSelect,
+//   emergency: {fieldId: Anteil Notfall-Pakete} (Prognose), onInspect: fieldId => void, inspected }
 export function renderMap(container, opts) {
   clear(container);
   const map = buildMap();
@@ -53,7 +57,7 @@ export function renderMap(container, opts) {
   const minY = Math.min(...pts.map((p) => p.y)) - SIZE - 6;
   const maxY = Math.max(...pts.map((p) => p.y)) + SIZE + 6;
   const svg = s('svg', { viewBox: `${minX} ${minY} ${maxX - minX} ${maxY - minY}`, role: 'img', 'aria-label': 'Karte' }, defs());
-  const color = TEAM_HEX[opts.teamIdx ?? 0];
+  const color = HUE;
   const gHex = s('g');
   const gOver = s('g');
   const gIcons = s('g');
@@ -76,6 +80,8 @@ export function renderMap(container, opts) {
     }
   };
 
+  // gestrichelte Umrisse nur, wenn nicht alle Felder wählbar sind
+  const restricted = !!opts.selectable && map.active.some((f) => !opts.selectable(f.id));
   for (const f of map.fields) {
     const c = center(f);
     const isActive = ['stadt', 'agglo', 'land'].includes(f.zone);
@@ -83,11 +89,12 @@ export function renderMap(container, opts) {
     const cls = ['hex'];
     if (selectable) cls.push('clickable');
     if (opts.selectable && !selectable && isActive) cls.push('dim');
-    if (opts.selectedField === f.id) cls.push('sel');
+    if (opts.selectedField === f.id || opts.inspected === f.id) cls.push('sel');
+    else if (selectable && restricted) cls.push('pick');
     let fill = ZONE_FILL[f.zone];
     const poly = s('polygon', {
       points: corners(c), fill, class: cls.join(' '),
-      onclick: selectable ? () => opts.onSelect && opts.onSelect(f.id) : null,
+      onclick: selectable ? () => opts.onSelect && opts.onSelect(f.id) : (isActive && !opts.selectable && opts.onInspect ? () => opts.onInspect(f.id) : null),
       onmouseenter: (ev) => {
         if (opts.rangePreview && (selectable || !opts.selectable)) drawRange(f.id);
         if (!isActive) return;
@@ -99,12 +106,12 @@ export function renderMap(container, opts) {
       onmouseleave: () => { tooltip.style.display = 'none'; if (opts.rangePreview) drawRange(opts.selectedField); }
     });
     gHex.append(poly);
-    if (f.zone === 'berg') gHex.append(s('path', { d: `M${c.x - 12} ${c.y + 8} L${c.x - 3} ${c.y - 8} L${c.x + 2} ${c.y} L${c.x + 6} ${c.y - 5} L${c.x + 13} ${c.y + 8} Z`, fill: '#a99f92', class: 'icon' }));
+    if (f.zone === 'berg') gHex.append(s('path', { d: `M${c.x - 12} ${c.y + 8} L${c.x - 3} ${c.y - 8} L${c.x + 2} ${c.y} L${c.x + 6} ${c.y - 5} L${c.x + 13} ${c.y + 8} Z`, fill: '#b3aa9d', class: 'icon' }));
     if (f.zone === 'see') gHex.append(s('path', { d: `M${c.x - 12} ${c.y} q6 -5 12 0 t12 0`, stroke: '#7fb3d9', 'stroke-width': 2, fill: 'none', class: 'icon' }));
     if (isActive) gHex.append(s('text', { x: c.x, y: c.y - SIZE * 0.55, 'text-anchor': 'middle', class: 'flabel' }, f.id));
-    if (opts.fieldStatus && opts.fieldStatus[f.id]) {
-      const st = opts.fieldStatus[f.id];
-      gHex.append(s('polygon', { points: corners(c, SIZE - 4), fill: 'none', stroke: st === 'bad' ? '#b83227' : '#2f7d3b', 'stroke-width': 3, class: 'icon', 'stroke-opacity': st === 'bad' ? 0.95 : 0.6 }));
+    if (opts.emergency && opts.emergency[f.id] > 0.05) {
+      const share = opts.emergency[f.id];
+      gHex.append(s('polygon', { points: corners(c, SIZE - 4), fill: NEG, 'fill-opacity': Math.min(0.35, 0.1 + share * 0.3), stroke: NEG, 'stroke-width': share > 0.5 ? 3 : 2, class: 'icon' }));
     }
   }
   drawZez();
@@ -124,9 +131,9 @@ export function renderMap(container, opts) {
     let x = c.x - (list.length * 15) / 2 + 1;
     for (const [key, n] of list) {
       const sym = key.startsWith('van') ? 'i-van' : key.startsWith('hub') ? 'i-bike' : key.startsWith('box') ? 'i-box' : 'i-crowd';
-      const fillC = key === 'vanDiesel' ? '#4a4f55' : key === 'vanE' ? '#1f8a4c' : key.endsWith('Pending') ? '#9aa0a6' : color;
+      const fillC = key === 'vanE' ? '#2e7d32' : key.endsWith('Pending') ? '#9a9a9a' : INK;
       gIcons.append(s('use', { href: `#${sym}`, x, y: c.y - 4, width: 14, height: 11, fill: fillC, color: fillC, class: 'icon', opacity: key.endsWith('Pending') ? 0.7 : 1 }));
-      if (n > 1) gIcons.append(s('text', { x: x + 7, y: c.y + 15, 'text-anchor': 'middle', class: 'flabel', style: 'fill:#1d272b;font-size:9px' }, `×${n}`));
+      if (n > 1) gIcons.append(s('text', { x: x + 7, y: c.y + 15, 'text-anchor': 'middle', class: 'flabel', style: 'fill:#141414;font-size:9px' }, `×${n}`));
       x += 15;
     }
   }
@@ -134,7 +141,7 @@ export function renderMap(container, opts) {
     for (const reg of ['nord', 'ost', 'west']) {
       const f = map.active.find((x) => x.region === reg && x.id.endsWith('1'));
       const c = center(f);
-      gIcons.append(s('use', { href: '#i-post', x: c.x + 8, y: c.y + 6, width: 13, height: 13, fill: opts.post === 'pending' ? '#9aa0a6' : '#c08a00', class: 'icon' }));
+      gIcons.append(s('use', { href: '#i-post', x: c.x + 8, y: c.y + 6, width: 13, height: 13, fill: opts.post === 'pending' ? '#9a9a9a' : INK, class: 'icon' }));
     }
   }
 
