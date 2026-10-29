@@ -100,7 +100,7 @@ export function GameScreen(root, controller, nav) {
   function legend() {
     return h('div', { class: 'legend' },
       ...['stadt', 'agglo', 'land', 'see', 'berg'].map((z) => h('span', {}, h('span', { class: 'swatch', style: { background: `var(--zone-${z})` } }), t('zone_' + z))),
-      h('span', {}, h('span', { class: 'swatch', style: { border: '2px dashed var(--bad)', background: 'transparent' } }), t('ev_zez')),
+      h('span', {}, h('span', { class: 'swatch', style: { border: '2px dashed #5b3f8c', background: 'transparent' } }), t('ev_zez')),
       h('span', {}, h('span', { class: 'swatch', style: { border: '2px solid var(--bad)', background: 'transparent' } }), t('el_emergency')),
       h('span', { class: 'muted' }, t('tutorialHint')));
   }
@@ -151,7 +151,13 @@ export function GameScreen(root, controller, nav) {
     if (p.length < max) sec.append(h('div', { style: { marginTop: '10px' } }, ui.configuring ? configurator() : actionMenu()));
     if (ui.error) sec.append(h('p', { class: 'err' }, ui.error));
     sec.append(h('div', { class: 'row', style: { marginTop: '12px' } }, h('span', { class: 'spacer' }),
-      h('button', { class: 'btn primary', onclick: async (ev) => { ev.target.disabled = true; await controller.submit(slot(), [...p]); ui.plan[slot()] = []; ui.configuring = null; ui.selectedField = null; } }, t('submit'))));
+      h('button', { class: 'btn primary', onclick: async (ev) => {
+        ev.target.disabled = true;
+        const sl = slot();
+        const actions = [...p];
+        ui.plan[sl] = []; ui.configuring = null; ui.selectedField = null; ui.removeSel.clear(); ui.error = '';
+        await controller.submit(sl, actions);
+      } }, t('submit'))));
     return sec;
   }
 

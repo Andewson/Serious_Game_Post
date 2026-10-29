@@ -128,7 +128,7 @@ input.code { font-size: 1.4rem; letter-spacing: 0.12em; text-transform: uppercas
 .hex.dim { opacity: 0.35; }
 .hex.sel { stroke: var(--ink); stroke-width: 3; }
 .flabel { font-size: 9px; fill: rgba(29, 39, 43, 0.55); pointer-events: none; font-weight: 600; }
-.zez { fill: none; stroke: var(--bad); stroke-width: 3; pointer-events: none; }
+.zez { fill: none; stroke: #5b3f8c; stroke-width: 3; pointer-events: none; }
 .zez.announced { stroke-dasharray: 7 5; opacity: 0.8; }
 .range { pointer-events: none; }
 .icon { pointer-events: none; }
