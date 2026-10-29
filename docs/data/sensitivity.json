@@ -1,0 +1,679 @@
+{
+  "seeds": 30,
+  "base": {
+    "out": {
+      "nichts": {
+        "cost": 7.319110621273055,
+        "all": 0
+      },
+      "hubsGeschickt": {
+        "cost": 5.883796015569108,
+        "all": 0.06666666666666667
+      },
+      "boxenHubs": {
+        "cost": 5.8178576325833244,
+        "all": 0.13333333333333333
+      },
+      "mixZonen": {
+        "cost": 5.408983818559412,
+        "all": 0.7333333333333333
+      },
+      "boxPost": {
+        "cost": 5.505608719282857,
+        "all": 0.6666666666666666
+      },
+      "stadtMax": {
+        "cost": 5.316754093730062,
+        "all": 0
+      },
+      "zeitfenster": {
+        "cost": 6.707689088492797,
+        "all": 0
+      }
+    },
+    "ranking": [
+      "mixZonen",
+      "boxPost",
+      "boxenHubs",
+      "hubsGeschickt",
+      "stadtMax",
+      "zeitfenster",
+      "nichts"
+    ]
+  },
+  "rows": [
+    {
+      "path": "elements.post.varCost",
+      "label": "Post: Kosten pro Paket",
+      "factor": 0.8,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.319110621273055,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.869363523135729,
+          "all": 0.06666666666666667
+        },
+        "boxenHubs": {
+          "cost": 5.796563535043799,
+          "all": 0.13333333333333333
+        },
+        "mixZonen": {
+          "cost": 5.384363422576486,
+          "all": 0.7333333333333333
+        },
+        "boxPost": {
+          "cost": 5.478799105155255,
+          "all": 0.7333333333333333
+        },
+        "stadtMax": {
+          "cost": 5.316754093730062,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.707689088492797,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.post.varCost",
+      "label": "Post: Kosten pro Paket",
+      "factor": 1.2,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.319110621273055,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.898228508002487,
+          "all": 0.06666666666666667
+        },
+        "boxenHubs": {
+          "cost": 5.839151730122852,
+          "all": 0.13333333333333333
+        },
+        "mixZonen": {
+          "cost": 5.433604214542338,
+          "all": 0.7
+        },
+        "boxPost": {
+          "cost": 5.532418333410458,
+          "all": 0.6
+        },
+        "stadtMax": {
+          "cost": 5.316754093730062,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.707689088492797,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.box.leasing",
+      "label": "Box: Miete pro Feld",
+      "factor": 0.8,
+      "best": "boxPost",
+      "second": "mixZonen",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.319110621273055,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.883796015569108,
+          "all": 0.06666666666666667
+        },
+        "boxenHubs": {
+          "cost": 5.757562981971782,
+          "all": 0.2
+        },
+        "mixZonen": {
+          "cost": 5.34868916794787,
+          "all": 0.7666666666666667
+        },
+        "boxPost": {
+          "cost": 5.382544870101485,
+          "all": 0.8666666666666667
+        },
+        "stadtMax": {
+          "cost": 5.256459443118519,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.707689088492797,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.box.leasing",
+      "label": "Box: Miete pro Feld",
+      "factor": 1.2,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.319110621273055,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.883796015569108,
+          "all": 0.06666666666666667
+        },
+        "boxenHubs": {
+          "cost": 5.8781522831948685,
+          "all": 0.1
+        },
+        "mixZonen": {
+          "cost": 5.469278469170956,
+          "all": 0.7
+        },
+        "boxPost": {
+          "cost": 5.628672568464228,
+          "all": 0.4666666666666667
+        },
+        "stadtMax": {
+          "cost": 5.377048744341607,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.707689088492797,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.hub.capacity",
+      "label": "Hub: Kapazität",
+      "factor": 0.8,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.319110621273055,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 6.195154885671422,
+          "all": 0
+        },
+        "boxenHubs": {
+          "cost": 5.8216459449348035,
+          "all": 0.13333333333333333
+        },
+        "mixZonen": {
+          "cost": 5.408983818559412,
+          "all": 0.7333333333333333
+        },
+        "boxPost": {
+          "cost": 5.505608719282857,
+          "all": 0.6666666666666666
+        },
+        "stadtMax": {
+          "cost": 5.316754093730062,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.707689088492797,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.hub.capacity",
+      "label": "Hub: Kapazität",
+      "factor": 1.2,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.319110621273055,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.743542862456058,
+          "all": 0.1
+        },
+        "boxenHubs": {
+          "cost": 5.8178576325833244,
+          "all": 0.13333333333333333
+        },
+        "mixZonen": {
+          "cost": 5.408983818559412,
+          "all": 0.7333333333333333
+        },
+        "boxPost": {
+          "cost": 5.505608719282857,
+          "all": 0.6666666666666666
+        },
+        "stadtMax": {
+          "cost": 5.316754093730062,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.707689088492797,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.vanE.leasing",
+      "label": "E-Van: Leasing",
+      "factor": 0.8,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.319110621273055,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.883796015569108,
+          "all": 0.06666666666666667
+        },
+        "boxenHubs": {
+          "cost": 5.811486382399648,
+          "all": 0.13333333333333333
+        },
+        "mixZonen": {
+          "cost": 5.35939943340792,
+          "all": 0.7666666666666667
+        },
+        "boxPost": {
+          "cost": 5.456024334131361,
+          "all": 0.7666666666666667
+        },
+        "stadtMax": {
+          "cost": 5.267169708578569,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.658104703341304,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.vanE.leasing",
+      "label": "E-Van: Leasing",
+      "factor": 1.2,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.319110621273055,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.883796015569108,
+          "all": 0.06666666666666667
+        },
+        "boxenHubs": {
+          "cost": 5.824228882767002,
+          "all": 0.13333333333333333
+        },
+        "mixZonen": {
+          "cost": 5.4585682037109065,
+          "all": 0.7
+        },
+        "boxPost": {
+          "cost": 5.555193104434349,
+          "all": 0.6
+        },
+        "stadtMax": {
+          "cost": 5.366338478881557,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.75727347364429,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.vanDiesel.driverCost",
+      "label": "Fahrerlohn (alle Vans)",
+      "factor": 0.8,
+      "best": "boxPost",
+      "second": "mixZonen",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 6.5572065727229845,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.041120708959488,
+          "all": 0.7333333333333333
+        },
+        "boxenHubs": {
+          "cost": 5.056912339732051,
+          "all": 0.7666666666666667
+        },
+        "mixZonen": {
+          "cost": 4.742968751266314,
+          "all": 0.8666666666666667
+        },
+        "boxPost": {
+          "cost": 4.850000688777612,
+          "all": 0.9
+        },
+        "stadtMax": {
+          "cost": 4.712396516244634,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 5.945785039942723,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.vanDiesel.driverCost",
+      "label": "Fahrerlohn (alle Vans)",
+      "factor": 1.2,
+      "best": "mixZonen",
+      "second": "stadtMax",
+      "top2Same": false,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 8.08101466982313,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 6.7264713221787265,
+          "all": 0
+        },
+        "boxenHubs": {
+          "cost": 6.578802925434599,
+          "all": 0
+        },
+        "mixZonen": {
+          "cost": 6.074998885852512,
+          "all": 0.03333333333333333
+        },
+        "boxPost": {
+          "cost": 6.161216749788098,
+          "all": 0
+        },
+        "stadtMax": {
+          "cost": 5.9211116712154945,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 7.469593137042867,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.emergency.varCost",
+      "label": "Notfall: Kosten pro Paket",
+      "factor": 0.8,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 6.849763781693992,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.853596555899929,
+          "all": 0.06666666666666667
+        },
+        "boxenHubs": {
+          "cost": 5.782460603817859,
+          "all": 0.13333333333333333
+        },
+        "mixZonen": {
+          "cost": 5.373487372585006,
+          "all": 0.7666666666666667
+        },
+        "boxPost": {
+          "cost": 5.472146250963294,
+          "all": 0.7666666666666667
+        },
+        "stadtMax": {
+          "cost": 5.1521282934398185,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.3952325872465545,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.emergency.varCost",
+      "label": "Notfall: Kosten pro Paket",
+      "factor": 1.2,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.788457460852118,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.913995475238285,
+          "all": 0.06666666666666667
+        },
+        "boxenHubs": {
+          "cost": 5.853254661348791,
+          "all": 0.13333333333333333
+        },
+        "mixZonen": {
+          "cost": 5.444480264533818,
+          "all": 0.7
+        },
+        "boxPost": {
+          "cost": 5.539071187602417,
+          "all": 0.6
+        },
+        "stadtMax": {
+          "cost": 5.481379894020311,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 7.020145589739037,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.crowd.varCost",
+      "label": "Crowd: Kosten pro Paket",
+      "factor": 0.8,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.319110621273055,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.861427930298101,
+          "all": 0.06666666666666667
+        },
+        "boxenHubs": {
+          "cost": 5.793860753364254,
+          "all": 0.16666666666666666
+        },
+        "mixZonen": {
+          "cost": 5.379549338337785,
+          "all": 0.7333333333333333
+        },
+        "boxPost": {
+          "cost": 5.505608719282857,
+          "all": 0.6666666666666666
+        },
+        "stadtMax": {
+          "cost": 5.281257723990268,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.668210448211429,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "elements.crowd.varCost",
+      "label": "Crowd: Kosten pro Paket",
+      "factor": 1.2,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.319110621273055,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.906164100840114,
+          "all": 0.06666666666666667
+        },
+        "boxenHubs": {
+          "cost": 5.841854511802395,
+          "all": 0.1
+        },
+        "mixZonen": {
+          "cost": 5.43841829878104,
+          "all": 0.7
+        },
+        "boxPost": {
+          "cost": 5.505608719282857,
+          "all": 0.6666666666666666
+        },
+        "stadtMax": {
+          "cost": 5.352250463469861,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.747167728774167,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "zones.stadt.failRate",
+      "label": "Fehlzustellung Stadt",
+      "factor": 0.8,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.300154119906411,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.871835185730447,
+          "all": 0.06666666666666667
+        },
+        "boxenHubs": {
+          "cost": 5.811900106874221,
+          "all": 0.13333333333333333
+        },
+        "mixZonen": {
+          "cost": 5.395519969283833,
+          "all": 0.7666666666666667
+        },
+        "boxPost": {
+          "cost": 5.489570209324181,
+          "all": 0.7
+        },
+        "stadtMax": {
+          "cost": 5.303906912609455,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.679006964200698,
+          "all": 0
+        }
+      }
+    },
+    {
+      "path": "zones.stadt.failRate",
+      "label": "Fehlzustellung Stadt",
+      "factor": 1.2,
+      "best": "mixZonen",
+      "second": "boxPost",
+      "top2Same": true,
+      "startFails": true,
+      "results": {
+        "nichts": {
+          "cost": 7.337863570598801,
+          "all": 0
+        },
+        "hubsGeschickt": {
+          "cost": 5.900264670271217,
+          "all": 0
+        },
+        "boxenHubs": {
+          "cost": 5.823632651367932,
+          "all": 0.13333333333333333
+        },
+        "mixZonen": {
+          "cost": 5.422147260592281,
+          "all": 0.7
+        },
+        "boxPost": {
+          "cost": 5.521437601433586,
+          "all": 0.6
+        },
+        "stadtMax": {
+          "cost": 5.329397941107131,
+          "all": 0
+        },
+        "zeitfenster": {
+          "cost": 6.735893972598736,
+          "all": 0
+        }
+      }
+    }
+  ],
+  "labels": {
+    "nichts": "Nichts ändern (nur Diesel)",
+    "hubsGeschickt": "Hubs in der Stadt mit Zeitfenstern, Post auf dem Land",
+    "boxenHubs": "Boxen und Hubs in der Stadt, Post auf dem Land",
+    "mixZonen": "Mix nach Zonen: Boxen Stadt, Post Land, E-Vans",
+    "boxPost": "Boxen überall, Post auf dem Land",
+    "stadtMax": "Stadt maximieren, Land vernachlässigen",
+    "zeitfenster": "Zeitfenster in allen Zonen"
+  }
+}

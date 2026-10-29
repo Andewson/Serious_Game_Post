@@ -1,0 +1,182 @@
+{
+  "version": "2.2.0",
+  "rounds": 4,
+  "actionsPerRound": 2,
+  "maxTeams": 5,
+  "upstreamCostPerParcel": 5.5,
+  "tariffPerParcel": 5.6,
+  "standards": {
+    "onTimeNational": 0.9,
+    "onTimeZone": 0.8
+  },
+  "zones": {
+    "stadt": {
+      "demand": 70,
+      "distance": 1.0,
+      "failRate": 0.12,
+      "timeWindowCapacityLoss": 0.15
+    },
+    "agglo": {
+      "demand": 30,
+      "distance": 1.4,
+      "failRate": 0.06,
+      "timeWindowCapacityLoss": 0.08
+    },
+    "land": {
+      "demand": 8,
+      "distance": 3.0,
+      "failRate": 0.04,
+      "timeWindowCapacityLoss": 0.25
+    }
+  },
+  "timeWindowFailFactor": 0.5,
+  "elements": {
+    "vanDiesel": {
+      "driverCost": 350,
+      "leasing": 60,
+      "drivers": 1,
+      "varCost": 0.25,
+      "co2": 250,
+      "capacity": 130,
+      "range": 2,
+      "weight": {
+        "stadt": 1.0,
+        "agglo": 1.25,
+        "land": 2.6
+      }
+    },
+    "vanE": {
+      "driverCost": 350,
+      "leasing": 105,
+      "drivers": 1,
+      "varCost": 0.08,
+      "co2": 40,
+      "capacity": 130,
+      "range": 2,
+      "weight": {
+        "stadt": 1.0,
+        "agglo": 1.25,
+        "land": 2.6
+      }
+    },
+    "hub": {
+      "driverCost": 300,
+      "leasing": 180,
+      "drivers": 2,
+      "varCost": 0.03,
+      "co2": 5,
+      "capacity": 360,
+      "range": 1,
+      "resupplyCost": 0.15,
+      "resupplyCo2": 40,
+      "weight": {
+        "stadt": 1.0,
+        "agglo": 1.8,
+        "land": 5.0
+      },
+      "buildDelay": 1,
+      "zones": [
+        "stadt"
+      ]
+    },
+    "box": {
+      "leasing": 60,
+      "drivers": 0,
+      "varCost": 0.05,
+      "co2": 0,
+      "acceptance": 0.4,
+      "failRate": 0.005,
+      "resupplyCost": 0.25,
+      "resupplyCo2": 30,
+      "buildDelay": 1
+    },
+    "post": {
+      "feePerRegion": 100,
+      "varCost": 4.2,
+      "co2": 120,
+      "onTimeRate": 0.85,
+      "failRate": 0.02,
+      "capacityShare": 1.0
+    },
+    "crowd": {
+      "varCost": 5.5,
+      "co2": 300,
+      "capacity": 150,
+      "range": 2,
+      "failRate": 0.08
+    },
+    "emergency": {
+      "varCost": 9.0,
+      "co2": 450,
+      "failRate": 0.05
+    }
+  },
+  "labour": {
+    "baseWageGrowth": 0.02,
+    "scarcitySensitivity": 0.5
+  },
+  "startNetwork": {
+    "vans": [
+      {
+        "field": "S1",
+        "count": 4
+      },
+      {
+        "field": "A2",
+        "count": 2
+      },
+      {
+        "field": "A8",
+        "count": 2
+      },
+      {
+        "region": "nord",
+        "count": 1
+      },
+      {
+        "region": "ost",
+        "count": 1
+      },
+      {
+        "region": "west",
+        "count": 1
+      }
+    ]
+  },
+  "events": {
+    "zez": {
+      "announceLead": 2
+    },
+    "peak": {
+      "announceLead": 1,
+      "demandFactor": 1.4
+    },
+    "co2tax": {
+      "announceLead": 1,
+      "chfPerKg": 0.6
+    },
+    "boxBoom": {
+      "announceLead": 1,
+      "acceptance": 0.6
+    },
+    "strike": {
+      "capacityFactor": 0.7,
+      "duration": 1
+    },
+    "fuel": {
+      "dieselVarFactor": 1.8,
+      "emergencyExtra": 1.0,
+      "duration": 2
+    },
+    "shortage": {
+      "capacityFactor": 0.85,
+      "wageJump": 0.05
+    },
+    "demandSurge": {
+      "factor": 1.3,
+      "duration": 1
+    },
+    "shocksPerGame": 2,
+    "extraAnnouncements": 1
+  }
+}

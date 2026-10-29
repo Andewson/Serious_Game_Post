@@ -1,0 +1,254 @@
+{
+  "solo": {
+    "nichts": {
+      "label": "Nichts ändern (nur Diesel)",
+      "cost": 7.449749762462972,
+      "onTime": 0.6659793488904071,
+      "co2": 424.9324330913463,
+      "fail": 0.0700366756598641,
+      "allStd": 0,
+      "stdNat": 0,
+      "stdCost": 0,
+      "stdZones": 0,
+      "stadt": 0.430627746805409,
+      "agglo": 0.9179692236256216,
+      "land": 0.9370602402916232,
+      "share": 0.5746341487605047
+    },
+    "hubsStadt": {
+      "label": "Früh grün: Hubs in der Stadt, Post auf dem Land",
+      "cost": 5.815790942069565,
+      "onTime": 0.8974035426038537,
+      "co2": 281.577278198053,
+      "fail": 0.08806530560426541,
+      "allStd": 0.1,
+      "stdNat": 0.43333333333333335,
+      "stdCost": 0.13333333333333333,
+      "stdZones": 1,
+      "stadt": 0.8732650185246804,
+      "agglo": 0.9260355508085693,
+      "land": 0.9175368040186027,
+      "share": 0.5138164991860964
+    },
+    "hubsGeschickt": {
+      "label": "Hubs in der Stadt mit Zeitfenstern, Post auf dem Land",
+      "cost": 5.908727093247418,
+      "onTime": 0.9057449246791308,
+      "co2": 281.6890816473904,
+      "fail": 0.07395081440648617,
+      "allStd": 0.06666666666666667,
+      "stdNat": 0.6666666666666666,
+      "stdCost": 0.06666666666666667,
+      "stdZones": 1,
+      "stadt": 0.8898257365795953,
+      "agglo": 0.919366436138899,
+      "land": 0.9332747274342512,
+      "share": 0.5177096767220477
+    },
+    "boxenHubs": {
+      "label": "Boxen und Hubs in der Stadt, Post auf dem Land",
+      "cost": 5.830289473906979,
+      "onTime": 0.9111439855318422,
+      "co2": 281.46808535321804,
+      "fail": 0.0651077269591061,
+      "allStd": 0.13333333333333333,
+      "stdNat": 0.7333333333333333,
+      "stdCost": 0.13333333333333333,
+      "stdZones": 1,
+      "stadt": 0.896846431720459,
+      "agglo": 0.9261905893126019,
+      "land": 0.9282192791688444,
+      "share": 0.5143886018743086
+    },
+    "mixZonen": {
+      "label": "Mix nach Zonen: Boxen Stadt, Post Land, E-Vans",
+      "cost": 5.4404625359905205,
+      "onTime": 0.9195173263004079,
+      "co2": 263.3979360910934,
+      "fail": 0.057865866397940426,
+      "allStd": 0.7166666666666667,
+      "stdNat": 0.8166666666666667,
+      "stdCost": 0.7666666666666667,
+      "stdZones": 1,
+      "stadt": 0.9269724248778026,
+      "agglo": 0.9067084818782617,
+      "land": 0.9243396380953562,
+      "share": 0.49694927387335697
+    },
+    "stadtMax": {
+      "label": "Stadt maximieren, Land vernachlässigen",
+      "cost": 5.32628417384294,
+      "onTime": 0.8564558865195424,
+      "co2": 311.9036663472998,
+      "fail": 0.05541197331155306,
+      "allStd": 0,
+      "stdNat": 0.03333333333333333,
+      "stdCost": 0.8,
+      "stdZones": 0,
+      "stadt": 0.9077114782751488,
+      "agglo": 0.8868927702990226,
+      "land": 0.5632495164410062,
+      "share": 0.49155401084688266
+    },
+    "boxPost": {
+      "label": "Boxen überall, Post auf dem Land",
+      "cost": 5.4767058887218205,
+      "onTime": 0.9171400699905766,
+      "co2": 239.1893436888689,
+      "fail": 0.06174879453072573,
+      "allStd": 0.7166666666666667,
+      "stdNat": 0.9,
+      "stdCost": 0.7166666666666667,
+      "stdZones": 1,
+      "stadt": 0.906405621864385,
+      "agglo": 0.9350702427582271,
+      "land": 0.9118910204747974,
+      "share": 0.4988145263313288
+    },
+    "zeitfenster": {
+      "label": "Zeitfenster in allen Zonen",
+      "cost": 6.763727681448497,
+      "onTime": 0.7821137945251426,
+      "co2": 350.8886310087026,
+      "fail": 0.04636534976152354,
+      "allStd": 0,
+      "stdNat": 0,
+      "stdCost": 0,
+      "stdZones": 0.016666666666666666,
+      "stadt": 0.7152558740703039,
+      "agglo": 0.8349469885588888,
+      "land": 0.9102896513209013,
+      "share": 0.5512372967158938
+    },
+    "vieleVans": {
+      "label": "Viele zusätzliche Vans",
+      "cost": 18.968128708917373,
+      "onTime": 0.9112502768646669,
+      "co2": 310.9904832985987,
+      "fail": 0.08874972313533308,
+      "allStd": 0,
+      "stdNat": 1,
+      "stdCost": 0,
+      "stdZones": 1,
+      "stadt": 0.8800000000000008,
+      "agglo": 0.9399999999999993,
+      "land": 0.9600000000000007,
+      "share": 0.7749649093922335
+    },
+    "postUndFlotte": {
+      "label": "Post-Vertrag, aber eigene Land-Vans behalten",
+      "cost": 6.425952999490557,
+      "onTime": 0.8151550103202954,
+      "co2": 334.4432070999532,
+      "fail": 0.08164186543562499,
+      "allStd": 0,
+      "stdNat": 0,
+      "stdCost": 0,
+      "stdZones": 0.016666666666666666,
+      "stadt": 0.740964486228743,
+      "agglo": 0.8738847713218462,
+      "land": 0.9573714858667485,
+      "share": 0.5385653421805591
+    },
+    "spaetBauen": {
+      "label": "Hub und Box erst spät",
+      "cost": 5.9732439895545415,
+      "onTime": 0.8529214993632146,
+      "co2": 314.94338257259864,
+      "fail": 0.07900563863915792,
+      "allStd": 0.016666666666666666,
+      "stdNat": 0.016666666666666666,
+      "stdCost": 0.03333333333333333,
+      "stdZones": 0.5166666666666667,
+      "stadt": 0.7891745273507594,
+      "agglo": 0.9173029371190832,
+      "land": 0.9370602402916232,
+      "share": 0.5204484376350124
+    },
+    "ungenutzterVan": {
+      "label": "Ungenutzter Van an der Zonengrenze",
+      "cost": 6.585865969745002,
+      "onTime": 0.8400342481078691,
+      "co2": 335.18216328703596,
+      "fail": 0.0833555216019941,
+      "allStd": 0,
+      "stdNat": 0,
+      "stdCost": 0,
+      "stdZones": 0.2833333333333333,
+      "stadt": 0.7822848792573488,
+      "agglo": 0.8908916716451031,
+      "land": 0.9370602402916232,
+      "share": 0.5446782250767611
+    }
+  },
+  "matches": [
+    {
+      "keys": [
+        "mixZonen",
+        "hubsStadt",
+        "boxPost",
+        "nichts"
+      ],
+      "wins": {
+        "mixZonen": 28,
+        "hubsStadt": 0,
+        "boxPost": 19,
+        "nichts": 0
+      },
+      "points": {
+        "mixZonen": 9.733333333333336,
+        "hubsStadt": 4.016666666666667,
+        "boxPost": 9.166666666666671,
+        "nichts": 1.0833333333333341
+      },
+      "noWinner": 13
+    },
+    {
+      "keys": [
+        "mixZonen",
+        "zeitfenster",
+        "stadtMax",
+        "vieleVans"
+      ],
+      "wins": {
+        "mixZonen": 13,
+        "zeitfenster": 0,
+        "stadtMax": 0,
+        "vieleVans": 0
+      },
+      "points": {
+        "mixZonen": 9.083333333333343,
+        "zeitfenster": 4.000000000000005,
+        "stadtMax": 7.083333333333329,
+        "vieleVans": 3.8333333333333353
+      },
+      "noWinner": 47
+    },
+    {
+      "keys": [
+        "hubsGeschickt",
+        "boxPost",
+        "mixZonen",
+        "boxenHubs"
+      ],
+      "wins": {
+        "hubsGeschickt": 1,
+        "boxPost": 18,
+        "mixZonen": 25,
+        "boxenHubs": 0
+      },
+      "points": {
+        "hubsGeschickt": 2.683333333333334,
+        "boxPost": 8.633333333333336,
+        "mixZonen": 9.283333333333337,
+        "boxenHubs": 3.400000000000001
+      },
+      "noWinner": 16
+    }
+  ],
+  "labour": {
+    "otherTeamCostWithout": 5.157035704341749,
+    "otherTeamCostWith": 5.562209981133278
+  },
+  "nSeeds": 60
+}
